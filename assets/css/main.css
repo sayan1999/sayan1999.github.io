@@ -292,13 +292,14 @@ input, select, textarea {
 	}
 
 	a {
-		color: #212931;
-		border-bottom-color: rgba(33, 41, 49, 0.5);
+		color: blue;
+		border-bottom-color: blue;
+		
 	}
 
 		a:hover {
-			border-bottom-color: transparent;
-			color: #18bfef !important;
+			border-bottom-color: yellow;
+			color: #ff69b4 !important;
 		}
 
 	strong, b {
