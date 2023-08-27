@@ -1,15 +1,13 @@
-<!DOCTYPE HTML>
-<!--
-	Massively by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
+<!doctype html>
+<html class="no-js" lang="en">
 
 <head>
-	<!-- Primary Meta Tags -->
-	<title>Portfolio - Sayan Dey</title>
-	<meta name="title" content="Portfolio - Sayan Dey">
+	<!-- meta data -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sayan's Portfolio</title>
+	<meta name="title" content="Sayan's Portfolio">
 	<meta name="description" content="About me, 
 		My work experience, 
 		Data Science and Machine learning projects, 
@@ -17,7 +15,7 @@
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website">
-	<meta property="og:title" content="Portfolio - Sayan Dey">
+	<meta property="og:title" content="Sayan's Portfolio">
 	<meta property="og:description" content="About me, 
 		My work experience, 
 		Data Science and Machine learning projects, 
@@ -26,337 +24,746 @@
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image">
-	<meta property="twitter:title" content="Portfolio - Sayan Dey">
+	<meta property="twitter:title" content="Sayan's Portfolio">
 	<meta property="twitter:description" content="About me, 
 		My work experience, 
 		Data Science and Machine learning projects, 
 		Creative Repos on github">
-	<meta property="twitter:image" content="images/portfolio.png">
+	<meta property="twitter:image" content="assets/images/about/profile_image.jpg">
+
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<!--font-family-->
+	<link
+		href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&amp;subset=devanagari,latin-ext"
+		rel="stylesheet">
 
 
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript>
-		<link rel="stylesheet" href="assets/css/noscript.css" />
-	</noscript>
-	<base target="_blank">
+
+	<!-- For favicon png -->
+	<link rel="apple-touch-icon" sizes="180x180" href="assets/logo/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/logo/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/logo/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+
+	<!--font-awesome.min.css-->
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+	<!--flat icon css-->
+	<link rel="stylesheet" href="assets/css/flaticon.css">
+
+	<!--animate.css-->
+	<link rel="stylesheet" href="assets/css/animate.css">
+
+	<!--owl.carousel.css-->
+	<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+
+	<!--bootstrap.min.css-->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+	<!-- bootsnav -->
+	<link rel="stylesheet" href="assets/css/bootsnav.css">
+
+	<!--style.css-->
+	<link rel="stylesheet" href="assets/css/style.css">
+
+	<!--responsive.css-->
+	<link rel="stylesheet" href="assets/css/responsive.css">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+	<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
 </head>
 
-<body class="is-preload">
+<body>
+	<!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
 
-	<!-- Wrapper -->
-	<div id="wrapper" class="fade-in">
+	<!-- top-area Start -->
+	<header class="top-area">
+		<div class="header-area">
+			<!-- Start Navigation -->
+			<nav class="navbar navbar-default bootsnav navbar-fixed dark no-background">
 
-		<!-- Intro -->
-		<div id="intro">
-			<h1>Hello,</h1>
-			<h2>This is Software Engineer Sayan Dey</h2>
-			<p>A Machine learning and Data Science Enthusiast</p>
-			<p>Software Testing Engineer with 2+ years of experience at Qualcomm in usb<br>
-				software testing and automation enhancement on existing framework. Excited<br>
-				to explore and implement machine learning solutions for real world problems.
-			</p>
-			<ul class="actions">
-				<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
-			</ul>
+				<div class="container">
+
+					<!-- Start Header Navigation -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+							<i class="fa fa-bars"></i>
+						</button>
+						<a class="navbar-brand" href="index.html">sayan</a>
+					</div><!--/.navbar-header-->
+					<!-- End Header Navigation -->
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+						<ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+							<li class=" smooth-menu active"></li>
+							<li class=" smooth-menu"><a href="#education">education</a></li>
+							<li class="smooth-menu"><a href="#skills">skills</a></li>
+							<li class="smooth-menu"><a href="#experience">experience</a></li>
+							<li class="smooth-menu"><a href="#portfolio">projects</a></li>
+							<li class="smooth-menu"><a href="#contact">contact</a></li>
+						</ul><!--/.nav -->
+					</div><!-- /.navbar-collapse -->
+				</div><!--/.container-->
+			</nav><!--/nav-->
+			<!-- End Navigation -->
+		</div><!--/.header-area-->
+
+		<div class="clearfix"></div>
+
+	</header><!-- /.top-area-->
+	<!-- top-area End -->
+
+	<!--welcome-hero start -->
+	<section id="welcome-hero" class="welcome-hero">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<div class="header-text">
+						<h2>hi <span>,</span> i am <br> sayan <br> dey <span>.</span> </h2>
+						<p>software engineer</p>
+						<a href="assets/download/ML.Resume.pdf" download>download resume</a>
+					</div><!--/.header-text-->
+				</div><!--/.col-->
+			</div><!-- /.row-->
+		</div><!-- /.container-->
+
+	</section><!--/.welcome-hero-->
+	<!--welcome-hero end -->
+
+	<!--about start -->
+	<section id="about" class="about">
+		<div class="section-heading text-center">
+			<h2>about me</h2>
+		</div>
+		<div class="container">
+			<div class="about-content">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="single-about-txt">
+							<h3>
+								I am a Machine learning and Data Science Enthusiast
+								Software Testing Engineer with 2+ years of experience at Qualcomm in usb software
+								testing and
+								automation enhancement on existing framework. Excited to explore and implement machine
+								learning
+								solutions for real world problems.
+							</h3>
+							<p>
+								Software Testing Engineer with 2+ years of experience at Qualcomm in usb
+								software testing and automation enhancement on existing framework. Excited
+								to explore and implement machine learning solutions for real world problems.
+							</p>
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="single-about-add-info">
+										<h3>phone</h3>
+										<p>9614955330</p>
+									</div>
+								</div>
+								<div class="col-sm-5">
+									<div class="single-about-add-info">
+										<h3>email</h3>
+										<p>mr.sayan.dey@gmail.com</p>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="single-about-add-info">
+										<h3>website</h3>
+										<p>sayan1999.github.io</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-offset-1 col-sm-5">
+						<div class="single-about-img">
+							<img src="assets/images/about/profile_image.jpg" alt="profile_image">
+							<div class="about-list-icon">
+								<ul>
+									<li>
+										<a href="mailto:mr.sayan.dey@gmail.com">
+											<i class="fa fa-inbox" aria-hidden="true"></i>
+										</a>
+									</li><!-- / li -->
+									<li>
+										<a href="https://github.com/sayan1999">
+											<i class="fa fa-github" aria-hidden="true"></i>
+										</a>
+
+									</li><!-- / li -->
+									<li>
+										<a href="https://linkedin.com/in/sdey">
+											<i class="fa fa-linkedin" aria-hidden="true"></i>
+										</a>
+									</li><!-- / li -->
+
+
+								</ul><!-- / ul -->
+							</div><!-- /.about-list-icon -->
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!--/.about-->
+	<!--about end -->
+
+	<!--education start -->
+	<section id="education" class="education">
+		<div class="section-heading text-center">
+			<h2>education</h2>
+		</div>
+		<div class="container">
+			<div class="education-horizontal-timeline">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="single-horizontal-timeline">
+							<div class="experience-time">
+								<h2>2017 - 2021</h2>
+								<h3>B.Tech <span>in </span> computer science</h3>
+							</div><!--/.experience-time-->
+							<div class="timeline-horizontal-border">
+								<i class="fa fa-circle" aria-hidden="true"></i>
+								<span class="single-timeline-horizontal"></span>
+							</div>
+							<div class="timeline">
+								<div class="timeline-content">
+									<h4 class="title">
+										NIT Rourkela
+									</h4>
+									<h5>Odissa, India</h5>
+									<p class="description">
+										Duis aute irure dolor in reprehenderit in vol patate velit esse cillum dolore eu
+										fugiat nulla pari. Excepteur sint occana inna tecat cupidatat non proident.
+									</p>
+								</div><!--/.timeline-content-->
+							</div><!--/.timeline-->
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="single-horizontal-timeline">
+							<div class="experience-time">
+								<h2>2009 - 2017</h2>
+								<h3>higher secondary</h3>
+							</div><!--/.experience-time-->
+							<div class="timeline-horizontal-border">
+								<i class="fa fa-circle" aria-hidden="true"></i>
+								<span class="single-timeline-horizontal"></span>
+							</div>
+							<div class="timeline">
+								<div class="timeline-content">
+									<h4 class="title">
+										Gorabazar I.C. Institution
+									</h4>
+									<h5>West Bengal, India</h5>
+									<p class="description">
+										Duis aute irure dolor in reprehenderit in vol patate velit esse cillum dolore eu
+										fugiat nulla pari. Excepteur sint occana inna tecat cupidatat non proident.
+									</p>
+								</div><!--/.timeline-content-->
+							</div><!--/.timeline-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		</div>
 
-		<!-- Header -->
-		<header id="header">
-			<a href="#nav" target="_self" class="logo">Welcome</a>
-		</header>
+	</section><!--/.education-->
+	<!--education end -->
 
-		<!-- Nav -->
-		<nav id="nav">
-			<ul class="links">
-				<li class="active"><a target="_self" href="index.html">Portfolio</a></li>
-				<!-- <li><a href="generic.html">Generic Page</a></li>
-							<li><a href="elements.html">Elements Reference</a></li> -->
-			</ul>
-			<ul class="icons">
-				<li><a href="https://twitter.com/SayanDe09980847" class="icon brands alt fa-twitter"><span
-							class="label">Twitter</span></a></li>
-				<li><a href="https://www.facebook.com/sayan.dey.96343" class="icon brands alt fa-facebook-f"><span
-							class="label">Facebook</span></a></li>
-				<li><a href="https://www.instagram.com/shy_on_day/" class="icon brands alt fa-instagram"><span
-							class="label">Instagram</span></a></li>
-				<li><a href="https://github.com/sayan1999" class="icon brands alt fa-github"><span
-							class="label">GitHub</span></a></li>
-				<li><a href="https://sayandeyinspiron.home.blog/author/sayaninspiron/"
-						class="icon brands alt fa-wordpress"><span class="label">Blog</span></a></li>
-			</ul>
-		</nav>
+	<!--skills start -->
+	<section id="skills" class="skills">
+		<div class="skill-content">
+			<div class="section-heading text-center">
+				<h2>skills</h2>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="single-skill-content">
+							<div class="barWrapper">
+								<span class="progressText">python</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="80"
+											aria-valuemin="10" aria-valuemax="100" style="">
 
-		<!-- Main -->
-		<div id="main">
+										</div>
+									</div>
+									<h3>80%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+							<div class="barWrapper">
+								<span class="progressText">keras</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="70"
+											aria-valuemin="10" aria-valuemax="100" style="">
 
-			<!-- Featured Post -->
-			<article class="post featured">
-				<header class="major">
-					<h3 style="font-family: Brush Script MT;">Sayan Dey</h3>
-					<p>An avid newbie developer with intern experiences at Qualcomm and Continental India.
-						Machine Leraning Enthusiast with full-fledged project building experiences in Keras (Python).
-						Developer experience in PYTHON and GOLANG, offering voluntary help in debugging requested codes
-						at <a href="https://www.facebook.com/sayan.dey.96343">my facebook messenger account</a>.
-						Also bears good competitive programming experience in C & C++.
-					</p>
+										</div>
+									</div>
+									<h3>70%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+							<div class="barWrapper">
+								<span class="progressText">sklearn</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="75"
+											aria-valuemin="10" aria-valuemax="100" style="">
 
-					<ul style="list-style-type:none;">
-						<li><b>Domain</b>: Computer Science & Engineering <i class="fas fa-laptop-code"></i></li>
-						<li><b>Status</b>: Incoming FTE @Qualcomm <i class="fas fa-briefcase"></i></li>
-						<li><b>Internships</b>: Qualcomm, Continental <i class="fas fa-briefcase"></i></li>
-						<li><b>Hackathons</b>: <a href="https://devfolio.co/submissions/project-sanjeevani">Hack The
-								Build 2k20</a>, <a href="https://devfolio.co/submissions/project-manna">Inout 2k20</a>
-							<i class="fas fa-users"></i>
+										</div>
+									</div>
+									<h3>75%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+							<div class="barWrapper">
+								<span class="progressText">Neural Networks</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="70"
+											aria-valuemin="10" aria-valuemax="100" style="">
+
+										</div>
+									</div>
+									<h3>70%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="single-skill-content">
+							<div class="barWrapper">
+								<span class="progressText">C/C++</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="75"
+											aria-valuemin="10" aria-valuemax="100" style="">
+
+										</div>
+									</div>
+									<h3>75%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+							<div class="barWrapper">
+								<span class="progressText">Generative AI</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="60"
+											aria-valuemin="10" aria-valuemax="100" style="">
+
+										</div>
+									</div>
+									<h3>85%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+							<div class="barWrapper">
+								<span class="progressText">communication</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="90"
+											aria-valuemin="10" aria-valuemax="100" style="">
+
+										</div>
+									</div>
+									<h3>90%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+							<div class="barWrapper">
+								<span class="progressText"> creativity</span>
+								<div class="single-progress-txt">
+									<div class="progress ">
+										<div class="progress-bar" role="progressbar" aria-valuenow="90"
+											aria-valuemin="10" aria-valuemax="100" style="">
+
+										</div>
+									</div>
+									<h3>90%</h3>
+								</div>
+							</div><!-- /.barWrapper -->
+						</div>
+					</div>
+				</div><!-- /.row -->
+			</div> <!-- /.container -->
+		</div><!-- /.skill-content-->
+
+	</section><!--/.skills-->
+	<!--skills end -->
+
+	<!--experience start -->
+	<section id="experience" class="experience">
+		<div class="section-heading text-center">
+			<h2>experience</h2>
+		</div>
+		<div class="container">
+			<div class="experience-content">
+				<div class="main-timeline">
+					<ul>
+						<li>
+							<div class="single-timeline-box fix">
+								<div class="row">
+									<div class="col-md-5">
+										<div class="experience-time text-right">
+											<h2>June 2021 to current</h2>
+											<h3>Engineer</h3>
+										</div><!--/.experience-time-->
+									</div><!--/.col-->
+									<div class="col-md-offset-1 col-md-5">
+										<div class="timeline">
+											<div class="timeline-content">
+												<h4 class="title">
+													<span><i class="fa fa-circle" aria-hidden="true"></i></span>
+													Qualcomm
+												</h4>
+												<h5>Hyderabad, India</h5>
+												<p class="description">
+													USB Software functionality testing on 3 different compute products.
+													Learnt about USB4 technology and automated USB4 functionality
+													testing.
+												</p>
+											</div><!--/.timeline-content-->
+										</div><!--/.timeline-->
+									</div><!--/.col-->
+								</div>
+							</div><!--/.single-timeline-box-->
 						</li>
-						<li><b>Programming Lang</b>: Python, C & C++, Golang <i class="fab fa-python"></i></li>
-						<li><b>Frameworks</b>: Keras, Flask(Intermediate)<i class="fas fa-laptop-code"></i></li>
-						<li><b>Platforms</b>: VS Code, Jupyter Lab, Jupyter Notebook, Colab, Remote SSH <i
-								class="far fa-keyboard"></i></li>
-						<li><b>Softwares</b>: Git, Matlab, Swagger <i class="fab fa-github"></i></li>
-						<li><b>Databases</b>: MongoDB, SQL, Redis <i class="fas fa-database"></i></li>
-						<li><b>Operating System</b>: Linux (Ubuntu) CLI prone and Windows 10 <i
-								class="fab fa-ubuntu"></i></li>
-						<li><b>Interest</b>: ML development, Data Science, Feature Development, Algorithm Optimization,
-							Quantumn Computing<i class="fas fa-laptop-code"></i></li>
-						<li><b>Put-Forward points</b>: Innovative Problem Solving Skills, Debugging Skills, Quick
-							Thinker and Implementer, Good Googling Skills <i class="fas fa-smile-beam"></i></li>
-						<li><b>Journalist Profile</b>: Campus Reporter and Content Writer at <a
-								href="https://mondaymorning.nitrkl.ac.in/portfolio/sayan_dey"> Monday Morning</a> <i
-								class="fas fa-pen-fancy"></i></li>
-						<li><b>Activities</b>: Badminton, Cricket, <a
-								href="https://sayandeyinspiron.home.blog/author/sayaninspiron/">Blogger</a>, <a
-								href="https://www.youtube.com/channel/UC1Xi3hCgNY8muo5CDWNxvlg">YouTuber</a> <i
-								class="fas fa-running"></i></li>
-						<li><b>Social Work</b>: Co-Founder and Ex-VP of animal welfare club <a
-								href="https://www.facebook.com/animal.welfare.nitrkl/">VoV</a> <i
-								class="fas fa-dog"></i></li>
+
+						<li>
+							<div class="single-timeline-box fix">
+								<div class="row">
+									<div class="col-md-offset-1 col-md-5 experience-time-responsive">
+										<div class="experience-time">
+											<h2>
+												<span><i class="fa fa-circle" aria-hidden="true"></i></span>
+												May 2020 - August 2020
+											</h2>
+											<h3>Interim Engineering Intern</h3>
+										</div><!--/.experience-time-->
+									</div><!--/.col-->
+									<div class="col-md-5">
+										<div class="timeline">
+											<div class="timeline-content text-right">
+												<h4 class="title">
+													Qualcomm
+												</h4>
+												<h5>Hyderabad, India</h5>
+												<p class="description">
+													Applied Machine Learning techniques using LSTMs to detect log
+													anomalies, also implemented a tree-depth based log parser.
+													Got a PPO following my completion of internship.
+												</p>
+											</div><!--/.timeline-content-->
+										</div><!--/.timeline-->
+									</div><!--/.col-->
+									<div class="col-md-offset-1 col-md-5 experience-time-main">
+										<div class="experience-time">
+											<h2>
+												<span><i class="fa fa-circle" aria-hidden="true"></i></span>
+												May 2020 - August 2020
+											</h2>
+											<h3>associate design director</h3>
+										</div><!--/.experience-time-->
+									</div><!--/.col-->
+								</div>
+							</div><!--/.single-timeline-box-->
+						</li>
+
+						<li>
+							<div class="single-timeline-box fix">
+								<div class="row">
+									<div class="col-md-5">
+										<div class="experience-time text-right">
+											<h2>May 2019 - July 2019</h2>
+											<h3>senior UI/UX designer</h3>
+										</div><!--/.experience-time-->
+									</div><!--/.col-->
+									<div class="col-md-offset-1 col-md-5">
+										<div class="timeline">
+											<div class="timeline-content">
+												<h4 class="title">
+													<span><i class="fa fa-circle" aria-hidden="true"></i></span>
+													Continental
+												</h4>
+												<h5>Kolkata, India</h5>
+												<p class="description">
+													This was my first corporate experience.
+													Quickly ramped up with Golang, a new proramming language
+													and migrated a software programming project to Golang.
+												</p>
+											</div><!--/.timeline-content-->
+										</div><!--/.timeline-->
+									</div><!--/.col-->
+								</div>
+							</div><!--/.single-timeline-box-->
+						</li>
+
+
+
 					</ul>
-				</header>
-				<ul class="actions special">
-					<li><a href="https://docs.google.com/document/d/1h0CgJO_ZlYBmPyQvjMfNv6C2-Q4ezleWm92ee8C6LB4/edit?usp=sharing"
-							class="button large">View
-							Resume</a></li>
-				</ul>
-			</article>
-			<article class="post featured">
-				<header class="major">
-					<span class="date">4 May - 3 August, 2020</span>
-					<h2>Interned at Qualcomm</h2>
-					<p>Developed an end-to-end ML module in Python for Execution Path Anomaly Detection.
-						This scalable module parses logs given a standard logging format.
-						This contains an implementation of LSTM architecture to learn valid sequence of logs from
-						passlogs.
-						The module is scalable and used to log-sequence and parameter-value anomalies.</p>
-				</header>
-				<a href="" class="image main"><img src="images/Qualcomm.webp" alt="" /></a>
-				<ul class="actions special">
-					<li><a href="https://www.instagram.com/p/CDHFzomllfF/" class="button large">Full Story</a></li>
-				</ul>
-			</article>
-			<article class="post featured">
-				<header class="major">
-					<span class="date">27 May - 17 July, 2019</span>
-					<h2>Interned at Continental</h2>
-					<p>Had an SDE internship experience at Kolkata base of Continental India Pvt. Ltd.
-						Developed a high-level mongo utility in GOLANG.
-						Developed a backend to connect to underlying mongo database and a swagger frontend to interact.
-						Worked on a live company project in GOLANG programming language.
-						Worked with socket programming.
-						Skills: MongoDB, RedisDB, Github, Go Routines, Swagger Docs, Basic Webdev etc.</p>
-				</header>
-				<a href="https://www.continental.com/en" class="image main"><img src="images/continental.jpg"
-						alt="" /></a>
-				<ul class="actions special">
-					<li><a href="#" class="button large">Full Story</a></li>
-				</ul>
-			</article>
-			<!-- Posts -->
-			<div>
-				<header class="major">
-					<h2>Premium Projects</h2>
-				</header>
+				</div><!--.main-timeline-->
+			</div><!--.experience-content-->
+		</div>
+
+	</section><!--/.experience-->
+	<!--experience end -->
+
+	<!--portfolio start -->
+	<section id="portfolio" class="portfolio">
+		<div class="portfolio-details">
+			<div class="section-heading text-center">
+				<h2>projects</h2>
+			</div>
+			<div class="container">
+				<div class="portfolio-content">
+					<div class="isotope">
+						<div class="row">
+
+							<div class="col-sm-4">
+								<div class="item">
+									<img src="https://github.com/sayan1999/Next-Word-Suggestion/raw/master/NWP.gif"
+										weight=370 height=220 alt="portfolio image" />
+									<div class="isotope-overlay">
+										<a href="https://github.com/sayan1999/Smart-Suggestions">
+											Smart Suggestions:<br>An AI keyboard suggestions<br>like google keyboard
+										</a>
+									</div><!-- /.isotope-overlay -->
+								</div><!-- /.item -->
+								<div class="item">
+									<img src="assets/images/portfolio/colabssh.jpg" weight="370" height="350"
+										alt="portfolio image" />
+									<div class="isotope-overlay">
+										<a href="https://github.com/sayan1999/Blover">
+											A pipeline to connect<br>
+											local ide with colab<br>
+											runtine.
+										</a>
+									</div><!-- /.isotope-overlay -->
+								</div><!-- /.item -->
+
+							</div><!-- /.col -->
+
+							<div class="col-sm-4">
+								<div class="item">
+									<img src="assets/images/portfolio/fakesocial.png" weight="370" height="350"
+										alt="portfolio image" />
+									<div class="isotope-overlay">
+										<a href="https://github.com/sayan1999/Live-Instagram-Spam-Detector">
+											An ML based<br>
+											Spam account detector<br>
+											for Instagram
+										</a>
+									</div><!-- /.isotope-overlay -->
+								</div><!-- /.item -->
+								<div class="item">
+									<img src="https://github.com/sayan1999/Loud-N-Cloud/raw/main/project-manna.gif"
+										weight=370 height=220 alt="portfolio image" />
+									<div class="isotope-overlay">
+										<a href="https://github.com/sayan1999/Loud-N-Cloud">
+											An ML-based Covid19<br>Geographical<br>Risk visualizer
+										</a>
+									</div><!-- /.isotope-overlay -->
+								</div><!-- /.item -->
+							</div><!-- /.col -->
+
+							<div class="col-sm-4">
+								<div class="item">
+									<img src="assets/images/portfolio/blover.jpg" weight="370" height="350"
+										alt="portfolio image" />
+									<div class="isotope-overlay">
+										<a href="https://github.com/sayan1999/Blover">
+											An ML based<br>
+											Image Cover Image<br>
+											generator for text contents
+										</a>
+									</div><!-- /.isotope-overlay -->
+								</div><!-- /.item -->
+								<div class="item">
+									<img src="assets/images/portfolio/summarizer.jpg" weight="370" height="350"
+										alt="portfolio image" />
+									<div class="isotope-overlay">
+										<a href="https://github.com/sayan1999/YouTube-Video-Summarizer">
+											A GPT based<br>
+											YouTube-Video-Summarizer
+										</a>
+									</div><!-- /.isotope-overlay -->
+								</div><!-- /.item -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!--/.isotope-->
+				</div><!--/.gallery-content-->
+			</div><!--/.container-->
+		</div><!--/.portfolio-details-->
+
+	</section><!--/.portfolio-->
+	<!--portfolio end -->
+
+
+
+	<!--contact start -->
+	<section id="contact" class="contact">
+		<div class="section-heading text-center">
+			<h2>contact me</h2>
+		</div>
+		<div class="container">
+			<div class="contact-content">
+				<div class="row">
+					<div class="col-md-offset-1 col-md-5 col-sm-6">
+						<div class="single-contact-box">
+							<div class="contact-form">
+								<form>
+									<div class="row">
+										<div class="col-sm-6 col-xs-12">
+											<div class="form-group">
+												<input type="text" class="form-control" id="name" placeholder="Name*"
+													name="name">
+											</div><!--/.form-group-->
+										</div><!--/.col-->
+										<div class="col-sm-6 col-xs-12">
+											<div class="form-group">
+												<input type="email" class="form-control" id="email" placeholder="Email*"
+													name="email">
+											</div><!--/.form-group-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<input type="text" class="form-control" id="subject"
+													placeholder="Subject" name="subject">
+											</div><!--/.form-group-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<textarea class="form-control" rows="8" id="comment"
+													placeholder="Message"></textarea>
+											</div><!--/.form-group-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="single-contact-btn">
+												<a class="contact-btn" href="mailto:mr.sayan.dey@gmail.com"
+													role="button">submit</a>
+											</div><!--/.single-single-contact-btn-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+								</form><!--/form-->
+							</div><!--/.contact-form-->
+						</div><!--/.single-contact-box-->
+					</div><!--/.col-->
+					<div class="col-md-offset-1 col-md-5 col-sm-6">
+						<div class="single-contact-box">
+							<div class="contact-adress">
+								<div class="contact-add-head">
+									<h3>sayan dey</h3>
+									<p>Software Engineer</p>
+								</div>
+								<div class="contact-add-info">
+									<div class="single-contact-add-info">
+										<h3>phone</h3>
+										<p>9614955330</p>
+									</div>
+									<div class="single-contact-add-info">
+										<h3>email</h3>
+										<p>mr.sayan.dey@gmail.com</p>
+									</div>
+									<div class="single-contact-add-info">
+										<h3>website</h3>
+										<p>sayan1999.github.io</p>
+									</div>
+								</div>
+							</div><!--/.contact-adress-->
+							<div class="hm-foot-icon">
+								<ul>
+									<li><a href="mailto:mr.sayan.dey@gmail.com"><i class="fa fa-inbox"></i></a></li>
+									<!--/li-->
+									<li><a href="https://github.com/sayan1999"><i class="fa fa-github"></i></a></li>
+									<!--/li-->
+									<li><a href="https://linkedin.com/in/sdey"><i class="fa fa-linkedin"></i></a></li>
+									<!--/li-->
+								</ul><!--/ul-->
+							</div><!--/.hm-foot-icon-->
+						</div><!--/.single-contact-box-->
+					</div><!--/.col-->
+				</div><!--/.row-->
+			</div><!--/.contact-content-->
+		</div><!--/.container-->
+
+	</section><!--/.contact-->
+	<!--contact end -->
+
+	<!--footer-copyright start-->
+	<footer id="footer-copyright" class="footer-copyright">
+		<div class="container">
+			<div class="hm-footer-copyright text-center">
+				<p>
+					&copy; copyright Sayan Dey. design and developed by <a
+						href="https://www.themesine.com/">themesine</a>
+				</p><!--/p-->
+			</div><!--/.text-center-->
+		</div><!--/.container-->
+
+		<div id="scroll-Top">
+			<div class="return-to-top">
+				<i class="fa fa-angle-up " id="scroll-top"></i>
 			</div>
 
-			<section class="posts">
-				<article>
-					<header>
-						<h2>Smart Suggestions</h2>
-					</header>
-					<a href="https://github.com/sayan1999/Smart-Suggestions" class="image fit"><img
-							src="https://github.com/sayan1999/Next-Word-Suggestion/blob/master/NWP.gif?raw=true"
-							alt="" /></a>
-					<p>Works like a smart suggestion feature as in google keyboard, suggests words on previous knowledge
-						of text data trained on.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/Smart-Suggestions/blob/master/README.md"
-								class="button">Code</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>Hush Chat</h2>
-					</header>
-					<a href="https://github.com/sayan1999/hush-chat" class="image fit"><img
-							src="https://github.com/sayan1999/hush-chat/blob/master/previews/demo.gif?raw=true"
-							alt="" /></a>
-					<p>A pc-to-pc chat app implemented using sockets with public-private-key encryption.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/hush-chat/blob/master/Readme.md"
-								class="button">Code</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>Load Vaccine Balancer</h2>
-					</header>
-					<a href="https://github.com/sayan1999/Loud-N-Cloud" class="image fit"><img
-							src="https://github.com/DesignrKnight/Loud-N-Cloud/raw/main/project-manna.gif" alt="" /></a>
-					<a href="https://github.com/sayan1999/Loud-N-Cloud" class="image fit"><img
-							src="https://github.com/DesignrKnight/Loud-N-Cloud/raw/main/vaccine_requirement.gif"
-							alt="" /></a>
-					<p>A Covid-19 Risk-Visualizer and a Relative Vaccination Urgency Estimator backed up by an enhanced
-						SIR model fitted with real data.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/Loud-N-Cloud/blob/main/README.md"
-								class="button">Code</a></li>
-						<li><a href="https://project-manna.herokuapp.com/" class="button">Website</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>Handwritten Digit Generator GAN (El Digito)</h2>
-					</header>
-					<a href="https://github.com/sayan1999/Handwritten-Digit-Generator-GAN" class="image fit"><img
-							src="https://github.com/sayan1999/Handwritten-Digit-Generator-GAN/raw/main/previews/preview.png"
-							alt="" /></a>
-					<a href="https://github.com/sayan1999/Handwritten-Digit-Generator-GAN" class="image fit"><img
-							src="https://github.com/sayan1999/Handwritten-Digit-Generator-GAN/raw/main/previews/digits.gif"
-							alt="" /></a>
-					<p>El Digito is an AI agent, which creates random digits which look like human-handwritten digits.
-						El Digito works on the principle of GAN, a generative model.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/Handwritten-Digit-Generator-GAN/blob/main/Readme.md"
-								class="button">Code</a></li>
-						<li><a href="https://ugly-digits.herokuapp.com/" class="button">Website</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>PhysiPy</h2>
-					</header>
-					<a href="http://www.youtube.com/watch?v=G1Yhx7QBNN8&t=17m28s" class="image fit"><img
-							src="https://github.com/sayan1999/PhysiPy/raw/master/double-slit-experiment/cover2.png"
-							alt="" /></a>
-					<p>Simulating and Visualizing Physics laws in Python.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/PhysiPy" class="button">Code</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>linux bt connect</h2>
-					</header>
-					<a href="https://github.com/sayan1999/linux_bt_connect" class="image fit"><img
-							src="https://github.com/sayan1999/linux_bt_connect/raw/master/previews/linuxbtconnect.png?raw=true"
-							alt="" /></a>
-					<p>A shell-script for linux-based systems that helps connect from to a bluetooth device fast with a
-						known device ssid.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/linux_bt_connect/blob/master/README.md"
-								class="button">Code</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>lovebox</h2>
-					</header>
-					<a href="https://github.com/sayan1999/lovebox" class="image fit"><img
-							src="https://github.com/sayan1999/lovebox/raw/master/src/examples/preview.png?raw=true"
-							alt="" /></a>
-					<p>A wrapper easy-to-use for playlist queueing over rhythmbox in linux based system. A music-player
-						utils. Add songs of different genre in config file and play a genre in rhythmbox very easily.
-					</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/lovebox/blob/master/Readme.md" class="button">Code</a>
-						</li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>mongo golang</h2>
-					</header>
-					<a href="https://github.com/sayan1999/mongo-golang" class="image fit"><img
-							src="https://github.com/sayan1999/mongo-golang/raw/master/previews/mongo-go.png?raw=true"
-							alt="" /></a>
-					<p>A very high-level mongo util library in golang with minimal features and a swagger frontend to
-						cennect to the database.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/mongo-golang/blob/master/README.md"
-								class="button">Code</a></li>
-					</ul>
-				</article>
-				<article>
-					<header>
-						<h2>WhatsApp Analyst</h2>
-					</header>
-					<a href="https://github.com/sayan1999/WhatsApp-Analyst" class="image fit"><img
-							src="https://github.com/sayan1999/WhatsApp-Analyst/raw/master/previews/Your%20WhatsApp%20chat%20frequency%20with%20Sayan%20versus%20day%20since%20you%20started.png?raw=true"
-							alt="" /></a>
-					<p>Reads incoming mails containing WhatsApp text chat attachments, analyze them and mail the
-						results.</p>
-					<ul class="actions special">
-						<li><a href="https://github.com/sayan1999/WhatsApp-Analyst/blob/master/README.md"
-								class="button">Code</a></li>
-					</ul>
-				</article>
-			</section>
+		</div><!--/.scroll-Top-->
 
-		</div>
+	</footer><!--/.footer-copyright-->
+	<!--footer-copyright end-->
 
-		<!-- Footer -->
-		<footer id="footer">
-			<section class="split contact">
-				<section class="alt">
-					<h3>Address</h3>
-					<p>Berhampore, Mushidabad, West Bengal 742101, India</p>
-				</section>
-				<section>
-					<h3>Phone</h3>
-					<p><a href="#">+91 9614955330</a></p>
-				</section>
-				<section>
-					<h3>Email</h3>
-					<p><a href="#">mr.sayan.dey@gmail.com</a></p>
-				</section>
-				<section>
-					<h3>Social</h3>
-					<ul class="icons alt">
-						<li><a href="https://twitter.com/SayanDe09980847" class="icon brands alt fa-twitter"><span
-									class="label">Twitter</span></a></li>
-						<li><a href="https://www.facebook.com/sayan.dey.96343"
-								class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="https://www.instagram.com/sayan.dey.96343/"
-								class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="https://github.com/sayan1999" class="icon brands alt fa-github"><span
-									class="label">GitHub</span></a></li>
-						<li><a href="https://sayandeyinspiron.home.blog/author/sayaninspiron/"
-								class="icon brands alt fa-wordpress"><span class="label">Blog</span></a></li>
-					</ul>
-				</section>
-			</section>
-		</footer>
-	</div>
+	<!-- Include all js compiled plugins (below), or include individual files as needed -->
 
-	<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/jquery.scrollex.min.js"></script>
-	<script src="assets/js/jquery.scrolly.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script src="assets/js/jquery.js"></script>
+
+	<!--modernizr.min.js-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+	<!--bootstrap.min.js-->
+	<script src="assets/js/bootstrap.min.js"></script>
+
+	<!-- bootsnav js -->
+	<script src="assets/js/bootsnav.js"></script>
+
+	<!-- jquery.sticky.js -->
+	<script src="assets/js/jquery.sticky.js"></script>
+
+	<!-- for progress bar start-->
+
+	<!-- progressbar js -->
+	<script src="assets/js/progressbar.js"></script>
+
+	<!-- appear js -->
+	<script src="assets/js/jquery.appear.js"></script>
+
+	<!-- for progress bar end -->
+
+	<!--owl.carousel.js-->
+	<script src="assets/js/owl.carousel.min.js"></script>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+
+	<!--Custom JS-->
+	<script src="assets/js/custom.js"></script>
 
 </body>
 
