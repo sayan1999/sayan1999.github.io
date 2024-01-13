@@ -1,3 +1,5 @@
+gdown
+docx2txt
 gunicorn
 flask
 requests
