@@ -2,3 +2,4 @@ README.txt
 LICENSE.txt
 .env
 env/
+__pycache__/

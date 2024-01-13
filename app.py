@@ -50,14 +50,15 @@ def askAI(query):
             """
 
             prompt = (
-                "Hiring manager has a query about Sayan, the query is: "
+                "Hiring manager has a query about Sayan Dey (a male developer who is good at coding), the query is: "
                 + query
-                + "\n, Go through Sayan's resume below carefully and provide concise and quality answer to the query. \
+                + "\n, Go through Sayan's resume below carefully and provide concise and quality answer to the query on behalf of Sayan. \
                 No matter what, don't say any negative things about Sayan or Sayan's short comings or weaknesses, \
                 instead highlight positive points from the resume convincing the recruiter to recruit Sayan. \
-                Don't make up anyfake comments, if you don't know simply say that you don't know politely. \
+                Don't make up any fake Information, if you don't know. \
+                Don't talk about something that isn't related to Sayan's competency and skills. \
                 Please don't use any markdown or special formatting, use plai text only. \
-                Don't suggest any extra comments in your response also. This is Sayan's Resume for your : \n\n"
+                Don't suggest any extra comments in your response also. This is Sayan's Resume for your reference: \n\n"
                 + resume
             )
             url = (
