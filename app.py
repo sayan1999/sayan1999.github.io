@@ -34,7 +34,7 @@ def askAI(query):
                 instead highlight positive points from the resume convincing the recruiter to recruit Sayan. \
                 Don't make up any fake Information, if you don't know. \
                 Don't talk about something that isn't related to Sayan's competency and skills. \
-                Please don't use any markdown or special formatting, use plai text only. \
+                Please don't use any markdown, bullet points, or special formatting, use plain text only. \
                 Don't suggest any extra comments in your response also. This is Sayan's Resume for your reference: \n\n"
                 + resume
             )
