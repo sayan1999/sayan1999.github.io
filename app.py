@@ -1,10 +1,12 @@
 import requests, json, os
 from dotenv import load_dotenv
+import traceback
 
 
 def askAI(query):
     if query.strip():
         try:
+            load_dotenv()
             resume = """
             Sayan Dey
             Machine Learning Engineer
@@ -54,6 +56,7 @@ def askAI(query):
                 No matter what, don't say any negative things about Sayan or Sayan's short comings or weaknesses, \
                 instead highlight positive points from the resume convincing the recruiter to recruit Sayan. \
                 Don't make up anyfake comments, if you don't know simply say that you don't know politely. \
+                Please don't use any markdown or special formatting, use plai text only. \
                 Don't suggest any extra comments in your response also. This is Sayan's Resume for your : \n\n"
                 + resume
             )
@@ -75,6 +78,8 @@ def askAI(query):
             else:
                 print("API request failed with status code:", response.status_code)
         except BaseException as e:
+            traceback.print_exc()
+            print(e)
             return "Internal processing error, please retry or refresh page!"
     else:
         return "Empty query not allowed"
@@ -113,5 +118,4 @@ def index():
 
 
 if __name__ == "__main__":
-    load_dotenv()
     app.run(debug=True)
