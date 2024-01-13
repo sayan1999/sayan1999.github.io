@@ -50,35 +50,35 @@
 
 
 	<!-- For favicon png -->
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/logo/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="assets/logo/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="assets/logo/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='logo/apple-touch-icon.png')}}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='logo/favicon-32x32.png')}}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='logo/favicon-16x16.png')}}">
+	<link rel="manifest" href="{{ url_for('static', filename='logo//site.webmanifest')}}">
 
 	<!--font-awesome.min.css-->
-	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css')}}">
 
 	<!--flat icon css-->
-	<link rel="stylesheet" href="assets/css/flaticon.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css')}}">
 
 	<!--animate.css-->
-	<link rel="stylesheet" href="assets/css/animate.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css')}}">
 
 	<!--owl.carousel.css-->
-	<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css')}}">
 
 	<!--bootstrap.min.css-->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
 
 	<!-- bootsnav -->
-	<link rel="stylesheet" href="assets/css/bootsnav.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootsnav.css')}}">
 
 	<!--style.css-->
-	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 
 	<!--responsive.css-->
-	<link rel="stylesheet" href="assets/css/responsive.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -116,6 +116,7 @@
 					<div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
 						<ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
 							<li class=" smooth-menu active"></li>
+							<li class=" smooth-menu"><a href="#TalkToMyResume">Talk 2 Me</a></li>
 							<li class=" smooth-menu"><a href="#education">education</a></li>
 							<li class="smooth-menu"><a href="#skills">skills</a></li>
 							<li class="smooth-menu"><a href="#experience">experience</a></li>
@@ -237,7 +238,56 @@
 	</section><!--/.about-->
 	<!--about end -->
 
+	<!--contact start -->
+	<section id="TalkToMyResume" class="contact">
+		<div class="section-heading text-center">
+			<h2>Ask AI about me 🤖</h2>
+		</div>
+		<div class="container">
+			<div class="contact-content">
+				<div class="row">
+					<div class="col-md-offset-1 col-md-9 col-sm-6">
+						<div class="single-contact-box">
+							<div class="contact-form">
+								<form>
 
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<input type="text" class="form-control" id="query"
+													placeholder="Ask me anything about Sayan 🤖" name="subject">
+											</div><!--/.form-group-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="single-contact-btn">
+												<button class="contact-btn" id="askbutton"
+													type="button">Loading...</button>
+											</div><!--/.single-single-contact-btn-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<textarea class="form-control" rows="8" id="response"
+													placeholder="Response"></textarea>
+											</div><!--/.form-group-->
+										</div><!--/.col-->
+									</div><!--/.row-->
+
+								</form><!--/form-->
+							</div><!--/.contact-form-->
+						</div><!--/.single-contact-box-->
+					</div><!--/.col-->
+				</div><!--/.row-->
+			</div><!--/.contact-content-->
+		</div><!--/.container-->
+
+	</section><!--/.contact-->
+	<!--contact end -->
 
 	<!--education start -->
 	<section id="education" class="education">
@@ -864,40 +914,39 @@
 	<!--footer-copyright end-->
 
 	<!-- Include all js compiled plugins (below), or include individual files as needed -->
-
-	<script src="assets/js/jquery.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.js')}}"></script>
 
 	<!--modernizr.min.js-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 
 	<!--bootstrap.min.js-->
-	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
 
 	<!-- bootsnav js -->
-	<script src="assets/js/bootsnav.js"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
 
 	<!-- jquery.sticky.js -->
-	<script src="assets/js/jquery.sticky.js"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
 
 	<!-- for progress bar start-->
 
 	<!-- progressbar js -->
-	<script src="assets/js/progressbar.js"></script>
+	<script src="{{ url_for('static', filename='js/progressbar.js')}}"></script>
 
 	<!-- appear js -->
-	<script src="assets/js/jquery.appear.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.appear.js')}}"></script>
 
 	<!-- for progress bar end -->
 
 	<!--owl.carousel.js-->
-	<script src="assets/js/owl.carousel.min.js"></script>
+	<script src="{{ url_for('static', filename='js/owl.carousel.min.js')}}"></script>
 
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 
 
 	<!--Custom JS-->
-	<script src="assets/js/custom.js"></script>
+	<script src="{{ url_for('static', filename='js/custom.js')}}"></script>
 
 	<script>
 
@@ -917,7 +966,45 @@
 
 
 
+		async function askAI(query) {
+			if (query.trim()) {
+				try {
+					let resp = await fetch(
+						"/askAI",
+						{
+							method: "POST",
+							body: JSON.stringify({
+								query: query
+							}),
+							headers: {
+								"Content-type": "application/json; charset=UTF-8",
+							},
+						}
+					)
 
+					let data = await resp.json()
+					return data["processed_response"];
+				} catch (err) {
+					return "Internal processing error, please retry or refresh page!"
+				};
+			} else {
+				return "Empty query not allowed";
+			}
+
+		};
+
+		window.onload = function () {
+			document.getElementById("askbutton").innerText = "Ask"
+			document.getElementById("askbutton").addEventListener('click', function () {
+				document.getElementById("askbutton").innerText = "Processing ..."
+				askAI(document.getElementById('query').value).then((data) => { console.log(data); document.getElementById('response').innerText = data; document.getElementById("askbutton").innerText = "Ask" }).catch((err) => {
+					console.error("Request failed", err);
+					document.getElementById('response').innerText = "Internal processing error, please retry or refresh page!";
+				});
+
+
+			})
+		}
 
 	</script>
 
