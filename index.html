@@ -116,7 +116,6 @@
 					<div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
 						<ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
 							<li class=" smooth-menu active"></li>
-							<li class=" smooth-menu"><a href="#TalkToMyResume">Talk 2 Me</a></li>
 							<li class=" smooth-menu"><a href="#education">education</a></li>
 							<li class="smooth-menu"><a href="#skills">skills</a></li>
 							<li class="smooth-menu"><a href="#experience">experience</a></li>
@@ -238,56 +237,7 @@
 	</section><!--/.about-->
 	<!--about end -->
 
-	<!--contact start -->
-	<section id="TalkToMyResume" class="contact">
-		<div class="section-heading text-center">
-			<h2>Ask AI about me 🤖</h2>
-		</div>
-		<div class="container">
-			<div class="contact-content">
-				<div class="row">
-					<div class="col-md-offset-1 col-md-9 col-sm-6">
-						<div class="single-contact-box">
-							<div class="contact-form">
-								<form>
 
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="form-group">
-												<input type="text" class="form-control" id="query"
-													placeholder="Ask me anything about Sayan 🤖" name="subject">
-											</div><!--/.form-group-->
-										</div><!--/.col-->
-									</div><!--/.row-->
-
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="single-contact-btn">
-												<button class="contact-btn" id="askbutton"
-													type="button">Loading...</button>
-											</div><!--/.single-single-contact-btn-->
-										</div><!--/.col-->
-									</div><!--/.row-->
-
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="form-group">
-												<textarea class="form-control" rows="8" id="response"
-													placeholder="Response"></textarea>
-											</div><!--/.form-group-->
-										</div><!--/.col-->
-									</div><!--/.row-->
-
-								</form><!--/form-->
-							</div><!--/.contact-form-->
-						</div><!--/.single-contact-box-->
-					</div><!--/.col-->
-				</div><!--/.row-->
-			</div><!--/.contact-content-->
-		</div><!--/.container-->
-
-	</section><!--/.contact-->
-	<!--contact end -->
 
 	<!--education start -->
 	<section id="education" class="education">
@@ -967,102 +917,7 @@
 
 
 
-		async function askAI(query) {
-			if (query.trim()) {
-				try {
-					let resume = `
-					Sayan Dey
-					Machine Learning Engineer
-					+91 9614955330  |  mr.sayan.dey@gmail.com  |  https://linkedin.com/in/sdey |  Hyderabad, India (IN)
 
-					Proficient in Python and ML algorithms, I translate machine learning and Deep learning expertise into real-world challenges, seeking a role to delve deeper and innovate.
-
-
-					Education
-
-					B.Tech, Computer Science & Engineering (CGPA 9.1) | National Institute of Technology, Rourkela | 2017-2021
-					Skills 
-					Programming Languages / Frameworks:	Python (Proficient), C++(Intermediate), Sklearn, Keras, PyTorch 
-					Tools:   Github actions CI/CD, Docker, MongoDB, Streamlit
-					DSA & Algorithm, Machine Learning, Neural Networks, Deep Learning, Natural Language Processing (NLP), Computer Vision, LLMs, Bagging-Boosting, Recommendation System, Topic Modelling, Object-oriented Programming (OOPs)
-					ExperienceSoftware Engineer | Qualcomm | Hyderabad IN | June 2021 to current
-					Increased test automation by 50% on USB testing, streamlining regression testing and reducing external bugs.
-					Boosted system power testing (10x faster), uncovering stability issues through extensive corner case coverage.
-					Spearheaded testing for cutting-edge USB4 features, ensuring back compatibility with older test suites.
-					Machine learning Intern | Qualcomm | Remote | May 2020 to August 2020
-					Built & deployed high-recall log anomaly detector with 68% accuracy, leveraging LSTM & tree-depth parsing.
-					Optimized sequence length through cross-validation and balanced recall & precision through ROC analysis.
-					S/W Engineering Intern | Continental | Kolkata IN | May 2019 to July 2019
-					Rebuilt a socket programming project in Golang, leveraging multithreading for improved performance.
-					Mastered NoSQL database management (MongoDB) with proficiency in Bson data format.
-
-					Achievements
-					HackTheBuild Hackathon (Top 8): Built an ML web app for optimizing India's COVID vaccine distribution strategy.
-					Qualcomm Impact Award 2023: Recognized for automating USB4 validation workflows on new software product
-					Machine Learning Projects ( https://github.com/sayan1999 )
-
-					Image Reverse Search with Google’s EfficientNet and Facebook’s FAISS library optimizing search efficiency through fast image embeddings and approximate nearest neighbor algorithms | Training speed: 65k images efficientnet-b2: 4 mins vs Resnet-152: 10 mins | CI-CD, Computer Vision, Streamlit, image embeddings | Demo: https://huggingface.co/spaces/Instantaneous1/search-by-image
-					Playpick: A personalized movie recommender powered by Collaborative Filtering that gets better with user feedback and interaction, no need for OTT premiums to recommend you movies | Metrics AP@100=0.4604  AP@20 of 0.3795 | Model Quantization, MongoDB, Streamlit | Demo: https://pick-1-movie.streamlit.app
-					Cricket-Prophet: A Live cricket score predictor that improves prediction with each ball played; outperforms run-rate or match-encounter based models | Metrics MSE: 11.68 in ODIs, MSE: 20.44 in T20s | CI-CD, Feature Engineering, Randomforest, Streamlit, Web Scraping | Demo: https://cricket-prophet.streamlit.app
-					Web-Brief: No size limit summariser for web pages that has no limit on input token length achieved by recursively chunkifying long documents and summarizing the chunks iteratively | NLP, Bert, Document Chunkify, Nodejs, Chrome extension, hugging face | Demo: https://long-doc-summary.streamlit.app
-					BERT-Video-Search: Abstractive summary & semantic search through Youtube video by grouping subtitles and perform vector similarity search with FAISS | CI-CD, S-BERT, Streamlit, vector embeddings, NLP, LLM, FAISS |Demo: https://huggingface.co/spaces/Instantaneous1/bert-video-search-and-jump
-					Courses
-
-					Stanford University: Machine Learning Foundations with Andrew Ng
-					Databricks LLM101x | Large Language Models: Application through Production
-					`;
-
-					let prompt = "Hiring manager has a query about Sayan, the query is: " + query +
-						"\n, Go through Sayan's resume below carefully and provide concise and quality answer to the query. \
-						No matter what, don't say any negative things about Sayan or Sayan's short comings or weaknesses, \
-						instead highlight positive points from the resume convincing the recruiter to recruit Sayan. \
-						Don't make up anyfake comments, if you don't know simply say that you don't know politely. \
-						Don't suggest any extra comments in your response also. This is Sayan's Resume for your : \n\n" + resume;
-
-					let resp = await fetch(
-						"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyB6p3Qurv0mpnJrUPc6ez4Q7UicMax0c1Y",
-						{
-							method: "POST",
-							body: JSON.stringify({
-								contents: [
-									{
-										parts: [
-											{
-												text: prompt,
-											},
-										],
-									},
-								],
-							}),
-							headers: {
-								"Content-type": "application/json; charset=UTF-8",
-							},
-						}
-					)
-
-					let data = await resp.json()
-					return data["candidates"][0]["content"]["parts"][0]["text"];
-				} catch (err) {
-					return "Internal processing error, please retry or refresh page!"
-				};
-			} else {
-				return "Empty query not allowed";
-			}
-
-		};
-
-		window.onload = function () {
-			document.getElementById("askbutton").innerText = "Ask"
-			document.getElementById("askbutton").addEventListener('click', function () {
-				document.getElementById("askbutton").innerText = "Processing ..."
-				askAI(document.getElementById('query').value).then((data) => { console.log(data); document.getElementById('response').innerText = data; document.getElementById("askbutton").innerText = "Ask" }).catch((err) => {
-					console.error("Request failed", err);
-					document.getElementById('response').innerText = "Internal processing error, please retry or refresh page!";
-				});
-
-
-			})
-		}
 
 	</script>
 
