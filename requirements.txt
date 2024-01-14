@@ -2,5 +2,6 @@ gdown
 docx2txt
 gunicorn
 flask
+flask_cors
 requests
 python-dotenv

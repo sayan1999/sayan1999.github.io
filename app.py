@@ -64,8 +64,10 @@ def askAI(query):
 
 
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__, static_folder="assets", template_folder="templates")
+CORS(app)
 
 
 @app.route("/askAI", methods=["POST"])

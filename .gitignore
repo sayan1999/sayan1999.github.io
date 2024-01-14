@@ -3,3 +3,4 @@ LICENSE.txt
 .env
 env/
 __pycache__/
+*.docx
