@@ -956,15 +956,6 @@
 			return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(to) + "&subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 		};
 
-		window.onload = function () {
-			document.getElementById("submitbutton").innerText = "Submit"
-			document.getElementById("submitbutton").addEventListener('click', function () {
-				document.getElementById("submitbutton").innerText = "Processing ..."
-				window.location.href = mailToString("mr.sayan.dey@gmail.com", document.getElementById('subject').value, document.getElementById('comment').value);
-				document.getElementById("submitbutton").innerText = "Submit"
-			})
-
-		}
 
 		async function askAI(query) {
 			if (query.trim()) {
@@ -994,6 +985,15 @@
 		};
 
 		window.onload = function () {
+
+			document.getElementById("submitbutton").innerText = "Submit"
+			document.getElementById("submitbutton").addEventListener('click', function () {
+				document.getElementById("submitbutton").innerText = "Processing ..."
+				window.location.href = mailToString("mr.sayan.dey@gmail.com", document.getElementById('subject').value, document.getElementById('comment').value);
+				document.getElementById("submitbutton").innerText = "Submit"
+			})
+
+			
 			document.getElementById("askbutton").innerText = "Ask"
 			document.getElementById("askbutton").addEventListener('click', function () {
 				document.getElementById("askbutton").innerText = "Processing ..."
