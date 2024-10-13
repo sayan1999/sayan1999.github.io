@@ -13,7 +13,7 @@ def download_and_convert_google_doc(url):
     f = glob.glob("*.docx")[0]
     with open(f, "rb") as infile:
         doc = docx2txt.process(infile)
-        print(doc)
+        # print(doc)
 
     return doc
 
@@ -54,6 +54,7 @@ def askAI(query):
                 # Process the response content here
                 return response_json["candidates"][0]["content"]["parts"][0]["text"]
             else:
+                print(response.text)
                 print("API request failed with status code:", response.status_code)
         except BaseException as e:
             traceback.print_exc()
