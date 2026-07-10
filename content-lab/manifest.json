@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "adversarial-validation",
+    "title": "Adversarial Validation"
+  },
+  {
+    "slug": "colbert",
+    "title": "ColBERT: Late Interaction Retrieval"
+  },
+  {
+    "slug": "pahf-interactive-drafting",
+    "title": "PAHF: Personalized AI Feedback"
+  },
+  {
+    "slug": "production-ready-evals",
+    "title": "Production-Ready Evals"
+  }
+]

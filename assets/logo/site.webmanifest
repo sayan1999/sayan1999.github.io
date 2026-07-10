@@ -1,0 +1,16 @@
+{
+  "name": "AI with Sayan",
+  "short_name": "AI with Sayan",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#FFFFFF",
+  "background_color": "#fff",
+  "description": "AI with Sayan — Learn AI through real problems",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

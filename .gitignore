@@ -1,0 +1,10 @@
+README.txt
+LICENSE.txt
+.env
+env/
+__pycache__/
+*.docx
+.playwright-mcp/
+.claude/settings.local.json
+.claude/
+.conda/
