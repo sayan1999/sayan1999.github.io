@@ -4,17 +4,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI with Sayan — Learn AI through real problems</title>
-  <meta name="description" content="Teaching AI through real problems — retrieval, evals, agents. By Sayan Dey.">
+  <title>AI System Designs</title>
+  <meta name="description" content="Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents. Focused strictly on system design, deterministic testing, and edge cases. Built for engineers moving models from prototype to production.">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SR2TBD4NDF"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments) } gtag('js', new Date()); gtag('config', 'G-SR2TBD4NDF');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GT-MR298GD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'GT-MR298GD');
+    gtag('config', 'G-SR2TBD4NDF');
+  </script>
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="AI with Sayan — Learn AI through real problems">
-  <meta property="og:description" content="Teaching AI through real problems — retrieval, evals, agents.">
-  <meta property="og:image" content="assets/logo/apple-touch-icon.png">
-  <meta property="twitter:card" content="summary_large_image">
+  <meta property="og:site_name" content="AI System Designs">
+  <meta property="og:title" content="AI System Designs">
+  <meta property="og:description" content="Engineering playbooks for modern AI stacks. Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.">
+  <meta property="og:url" content="https://sayan1999.github.io/">
+  <meta property="og:image" content="https://sayan1999.github.io/assets/logo/apple-touch-icon.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@aiwithsayan">
+  <meta name="twitter:title" content="AI System Designs">
+  <meta name="twitter:description" content="Engineering playbooks for modern AI stacks. Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.">
+  <meta name="twitter:image" content="https://sayan1999.github.io/assets/logo/apple-touch-icon.png">
 
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/logo/favicon-32x32.png">
@@ -28,6 +41,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
 
   <style>
     *,
@@ -195,6 +209,14 @@
     /* Reading-column sections */
     .art-header {
       padding: 4rem var(--pad) 1.75rem;
+      position: relative;
+    }
+
+    .art-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
     }
 
     .art-num {
@@ -203,7 +225,12 @@
       letter-spacing: 0.25em;
       color: var(--gold);
       opacity: 0.9;
-      margin-bottom: 1rem;
+    }
+
+    .art-meta-sep {
+      font-size: 0.5rem;
+      color: var(--text3);
+      opacity: 0.5;
     }
 
     .art-tags {
@@ -221,7 +248,10 @@
       text-transform: uppercase;
       color: var(--gold);
       opacity: 0.7;
+      cursor: pointer;
+      transition: opacity .15s;
     }
+    .atag:hover { opacity: 1; }
 
     .atag-dash {
       color: var(--text3);
@@ -571,7 +601,10 @@
       padding: 0.18rem 0.5rem;
       border-radius: 3px;
       letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
     }
+    .htag:hover { color: var(--gold); border-color: var(--gold); }
 
     .skel {
       height: 0.9rem;
@@ -706,6 +739,220 @@
         width: clamp(220px, 68vw, 300px);
       }
     }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      position: relative;
+      padding: 1rem var(--pad);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.6rem 2.4rem 0.6rem 0.9rem;
+      outline: none;
+      letter-spacing: 0.04em;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .search-input::placeholder { color: var(--text3); }
+    .search-input::-webkit-search-cancel-button { display: none; }
+
+    .search-input:focus {
+      border-color: var(--cyan);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: calc(var(--pad) + 0.6rem);
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      padding: 0 0.2rem;
+      display: none;
+      transition: color .15s;
+    }
+
+    .search-clear:hover { color: var(--text); }
+
+    .search-results {
+      position: absolute;
+      top: calc(100% - 1px);
+      left: var(--pad);
+      right: var(--pad);
+      background: var(--surface);
+      border: 1px solid var(--cyan);
+      z-index: 200;
+      display: none;
+      max-height: 340px;
+      overflow-y: auto;
+    }
+
+    .search-result-item {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .12s;
+    }
+
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: var(--surface2); }
+
+    .search-result-title {
+      font-size: 0.82rem;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+
+    .search-result-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.52rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    .search-empty {
+      padding: 0.75rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--text3);
+    }
+
+    .art-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── SHARE & ACTIONS ── */
+    .share-wrap {
+      position: absolute;
+      top: 1.5rem;
+      right: var(--pad);
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+    .share-btn svg { width: 11px; height: 11px; fill: var(--cyan); flex-shrink: 0; }
+    .share-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+
+    .share-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.75rem;
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 200;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+    }
+    .share-menu.open { display: flex; }
+
+    .share-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      color: var(--text3);
+      cursor: pointer;
+      transition: color .15s, transform .15s;
+      background: none;
+      border: none;
+      padding: 0;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .share-icon svg { width: 17px; height: 17px; fill: currentColor; }
+    .share-icon:hover { transform: scale(1.2); }
+    .share-icon.whatsapp:hover  { color: #25d366; }
+    .share-icon.twitter:hover   { color: #e4e4e4; }
+    .share-icon.reddit:hover    { color: #ff4500; }
+    .share-icon.instagram:hover { color: #e1306c; }
+    .share-icon.copylink:hover  { color: var(--cyan); }
+
+    .share-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .share-copied {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.5rem;
+      color: var(--cyan);
+      letter-spacing: 0.08em;
+      display: none;
+    }
+
+.page-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2.5rem var(--pad);
+      border-top: 1px solid var(--border);
+    }
+
+    .page-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
   </style>
 </head>
 
@@ -726,10 +973,9 @@
       <!-- HERO -->
       <header class="site-hero">
         <div class="hero-eyebrow">@aiwithsayan</div>
-        <h1 class="hero-title">AI with <em>Sayan</em></h1>
-        <p class="hero-subtitle">Real problems. Clear explanations. No hype.</p>
-        <p class="hero-desc">Deep dives into the parts of AI that actually matter — retrieval, evaluation, agents, and
-          the messy bits in between. Each post is a carousel you can scroll through, backed by a full writeup.</p>
+        <h1 class="hero-title">AI System <em>Designs</em></h1>
+        <p class="hero-subtitle">Engineering playbooks for modern AI stacks.</p>
+        <p class="hero-desc">Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents. Focused strictly on system design, deterministic testing, and edge cases. Built for engineers moving models from prototype to production.</p>
         <div class="hero-divider"></div>
         <div class="hero-meta">
           <span>Sayan Dey</span>
@@ -740,7 +986,14 @@
         </div>
       </header>
 
+      <div class="search-wrap">
+        <input type="search" id="search-input" class="search-input" placeholder="/ search articles…" autocomplete="off" spellcheck="false" />
+        <button class="search-clear" id="search-clear" aria-label="Clear search">×</button>
+        <div class="search-results" id="search-results"></div>
+      </div>
+
       <div id="feed"></div>
+      <div id="pagination"></div>
 
     </div>
   </div>
@@ -750,29 +1003,68 @@
       'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
     const $ = id => document.getElementById(id);
-    const strips = {}; /* { idx: { track, cardW } } */
+    const strips = {};
+    const postData = {}; /* idx -> { slug, title } for current page */
+
+    const PAGE_SIZE = 10;
+    let allPosts = [];
+    let currentPage = 1;
+
+    /* ── SVG icon strings ── */
+    const SVG_SHARE = `<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>`;
+    const SVG_WA = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.953 9.953 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>`;
+    const SVG_X = `<svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
+    const SVG_REDDIT = `<svg viewBox="0 0 24 24"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>`;
+    const SVG_IG = `<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>`;
+    const SVG_LINK = `<svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>`;
 
     fetch('content-lab/manifest.json')
       .then(r => r.json())
-      .then(build)
+      .then(posts => {
+        allPosts = posts.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        initSearch(allPosts);
+        const permalinkSlug = new URLSearchParams(window.location.search).get('post');
+        if (permalinkSlug) {
+          const pIdx = allPosts.findIndex(p => p.slug === permalinkSlug);
+          if (pIdx !== -1) {
+            const page = Math.floor(pIdx / PAGE_SIZE) + 1;
+            const localIdx = (pIdx % PAGE_SIZE) + 1;
+            build(page, `post-${localIdx}`);
+            return;
+          }
+        }
+        build(1);
+      })
       .catch(e => console.error('manifest error', e));
 
-    function build(posts) {
+    function build(page, scrollTarget) {
+      currentPage = page;
+      const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
+      const start = (page - 1) * PAGE_SIZE;
+      const pagePosts = allPosts.slice(start, start + PAGE_SIZE);
+
+      Object.keys(strips).forEach(k => delete strips[k]);
+      Object.keys(postData).forEach(k => delete postData[k]);
 
       const feed = $('feed');
+      feed.innerHTML = '';
+      $('snav-posts').innerHTML = '';
 
-      posts.forEach((post, i) => {
+      pagePosts.forEach((post, i) => {
         const idx = i + 1;
+        const globalIdx = start + i + 1;
         const slug = post.slug;
-        const shortSlug = `${String(idx).padStart(2, '0')} // ${slug.replace(/-/g, ' ').toUpperCase()}`;
+        const dateStr = post.date ? formatDate(post.date) : '';
 
         /* Sidebar tick */
         $('snav-posts').insertAdjacentHTML('beforeend', `
         <a class="snav-item" id="snav-${idx}" href="#post-${idx}">
-          <span class="snav-num">${String(idx).padStart(2, '0')}</span>
+          <span class="snav-num">${String(globalIdx).padStart(2, '0')}</span>
           <div class="snav-tick"></div>
         </a>
       `);
+
+        postData[idx] = { slug, title: post.title };
 
         /* Article */
         const art = document.createElement('article');
@@ -781,7 +1073,22 @@
         art.innerHTML = `
         <!-- Header -->
         <div class="art-header">
-          <div class="art-num">${String(idx).padStart(2, '0')}</div>
+          <div class="share-wrap">
+            <button class="share-btn" onclick="toggleShare(${idx})">${SVG_SHARE} share</button>
+            <div class="share-menu" id="share-menu-${idx}">
+              <button class="share-icon whatsapp" onclick="shareWA(${idx})" title="WhatsApp">${SVG_WA}</button>
+              <button class="share-icon twitter"   onclick="shareX(${idx})"  title="X / Twitter">${SVG_X}</button>
+              <button class="share-icon reddit"    onclick="shareReddit(${idx})" title="Reddit">${SVG_REDDIT}</button>
+              <button class="share-icon instagram" onclick="shareIG(${idx})" title="Instagram (copies link)">${SVG_IG}</button>
+              <div class="share-divider"></div>
+              <button class="share-icon copylink"  onclick="copyShareLink(${idx})" title="Copy link">${SVG_LINK}</button>
+              <span class="share-copied" id="share-copied-${idx}">copied!</span>
+            </div>
+          </div>
+          <div class="art-meta-row">
+            <div class="art-num">${String(globalIdx).padStart(2, '0')}</div>
+            ${dateStr ? `<span class="art-meta-sep">·</span><div class="art-date">${escHtml(dateStr)}</div>` : ''}
+          </div>
           <div class="art-tags" id="tags-${idx}">
             <span class="atag" style="opacity:.3">— — —</span>
           </div>
@@ -810,6 +1117,7 @@
           <div class="skel"></div>
           <div class="skel" style="width:82%"></div>
         </div>
+
       `;
         feed.appendChild(art);
 
@@ -818,8 +1126,31 @@
         loadCaption(idx, slug);
       });
 
-      wireScrollSpy(posts.length);
+      renderPagination(page, totalPages);
+      wireScrollSpy(pagePosts.length);
       wireDragScroll();
+      if (scrollTarget) {
+        scrollWhenStable(scrollTarget);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function renderPagination(page, total) {
+      const el = $('pagination');
+      if (total <= 1) { el.innerHTML = ''; return; }
+      el.innerHTML = `
+        <div class="page-nav">
+          <button class="page-btn" onclick="build(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← prev</button>
+          <span class="page-info">page ${page} / ${total}</span>
+          <button class="page-btn" onclick="build(${page + 1})" ${page >= total ? 'disabled' : ''}>next →</button>
+        </div>
+      `;
     }
 
     /* ── Render all PDF pages into horizontal strip ── */
@@ -933,21 +1264,29 @@
             const txt = p.textContent.trim();
             if (/^(#\w+\s*)+$/.test(txt)) {
               const tags = txt.split(/\s+/).filter(Boolean);
+              const tagWords = tags.map(t => t.replace('#', ''));
+
               tags.slice(0, 5).forEach((t, i) => {
+                const word = t.replace('#', '');
                 if (i > 0) tagsRow.insertAdjacentHTML('beforeend', '<span class="atag-dash">—</span>');
                 tagsRow.insertAdjacentHTML('beforeend',
-                  `<span class="atag">${escHtml(t.replace('#', ''))}</span>`
+                  `<span class="atag" onclick="filterByTag('${word}')">${escHtml(word)}</span>`
                 );
               });
+
               const row = document.createElement('div');
               row.className = 'hashtag-row';
               tags.forEach(t => {
+                const word = t.replace('#', '');
                 const s = document.createElement('span');
                 s.className = 'htag';
                 s.textContent = t;
+                s.onclick = () => filterByTag(word);
                 row.appendChild(s);
               });
               p.replaceWith(row);
+
+              updatePostTags(slug, tagWords);
               found = true;
             }
           });
@@ -977,6 +1316,183 @@
         });
       }, { threshold: 0.15 });
       articles.forEach(a => obs.observe(a));
+    }
+
+    /* Scroll to an article after its height stabilises (PDFs render async) */
+    function scrollWhenStable(postId) {
+      const el = $(postId);
+      if (!el) return;
+      let timer;
+      const ro = new ResizeObserver(() => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          ro.disconnect();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      });
+      ro.observe(el);
+      /* Hard fallback in case ResizeObserver never fires */
+      setTimeout(() => { ro.disconnect(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 3000);
+    }
+
+    /* ── Share ── */
+    function getPostUrl(slug) {
+      return window.location.origin + '/articles/share.html?slug=' + encodeURIComponent(slug);
+    }
+
+    function toggleShare(idx) {
+      const menu = $(`share-menu-${idx}`);
+      const isOpen = menu.classList.contains('open');
+      document.querySelectorAll('.share-menu.open').forEach(m => m.classList.remove('open'));
+      if (!isOpen) menu.classList.add('open');
+    }
+
+    function shareWA(idx) {
+      const { slug, title } = postData[idx];
+      window.open('https://wa.me/?text=' + encodeURIComponent(title + ' ' + getPostUrl(slug)), '_blank', 'noopener');
+      $(`share-menu-${idx}`).classList.remove('open');
+    }
+
+    function shareX(idx) {
+      const { slug, title } = postData[idx];
+      const url = getPostUrl(slug);
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
+      $(`share-menu-${idx}`).classList.remove('open');
+    }
+
+    function shareReddit(idx) {
+      const { slug, title } = postData[idx];
+      const url = getPostUrl(slug);
+      window.open('https://reddit.com/submit?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title), '_blank', 'noopener');
+      $(`share-menu-${idx}`).classList.remove('open');
+    }
+
+    function shareIG(idx) {
+      copyShareLink(idx); /* Instagram has no direct share URL; copy link instead */
+    }
+
+    function copyShareLink(idx) {
+      const { slug } = postData[idx];
+      navigator.clipboard.writeText(getPostUrl(slug)).then(() => {
+        const el = $(`share-copied-${idx}`);
+        if (el) { el.style.display = 'inline'; setTimeout(() => el.style.display = 'none', 2000); }
+      });
+      $(`share-menu-${idx}`).classList.remove('open');
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.share-wrap')) {
+        document.querySelectorAll('.share-menu.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    /* ── Search ── */
+    let fuse = null;
+
+    const fuseOptions = {
+      keys: [
+        { name: 'title', weight: 2 },
+        { name: 'tags',  weight: 1.5 },
+        { name: 'slug',  weight: 0.5 },
+      ],
+      threshold: 0.4,
+      includeMatches: true,
+      minMatchCharLength: 2,
+    };
+
+    function updatePostTags(slug, tags) {
+      const post = allPosts.find(p => p.slug === slug);
+      if (post) post.tags = tags;
+      if (fuse) fuse = new Fuse(allPosts, fuseOptions);
+    }
+
+    function filterByTag(tag) {
+      const input = $('search-input');
+      const clearBtn = $('search-clear');
+      input.value = tag;
+      clearBtn.style.display = 'block';
+      /* defer past the click-bubble that would otherwise close the dropdown */
+      setTimeout(() => {
+        input.dispatchEvent(new Event('input'));
+        input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        input.focus();
+      }, 0);
+    }
+
+    function initSearch(posts) {
+      fuse = new Fuse(posts, fuseOptions);
+
+      const input = $('search-input');
+      const clearBtn = $('search-clear');
+      const results = $('search-results');
+
+      input.addEventListener('input', () => {
+        const q = input.value.trim();
+        clearBtn.style.display = q ? 'block' : 'none';
+        if (!q) { results.style.display = 'none'; return; }
+        const hits = fuse.search(q, { limit: 8 });
+        renderSearchResults(hits, results);
+      });
+
+      input.addEventListener('focus', () => {
+        const q = input.value.trim();
+        if (!q || !fuse) return;
+        const hits = fuse.search(q, { limit: 8 });
+        renderSearchResults(hits, results);
+      });
+
+      input.addEventListener('keydown', e => {
+        if (e.key !== 'Enter') return;
+        const first = results.querySelector('.search-result-item');
+        if (first) first.click();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        clearBtn.style.display = 'none';
+        results.style.display = 'none';
+        input.focus();
+      });
+
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.search-wrap')) results.style.display = 'none';
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === '/' && document.activeElement !== input) {
+          e.preventDefault();
+          input.focus();
+        }
+        if (e.key === 'Escape') {
+          results.style.display = 'none';
+          input.blur();
+        }
+      });
+    }
+
+    function renderSearchResults(hits, container) {
+      if (!hits.length) {
+        container.innerHTML = '<div class="search-empty">no results</div>';
+        container.style.display = 'block';
+        return;
+      }
+      container.innerHTML = hits.map(({ item, refIndex }) => {
+        const page = Math.floor(refIndex / PAGE_SIZE) + 1;
+        const localIdx = (refIndex % PAGE_SIZE) + 1;
+        const dateStr = item.date ? formatDate(item.date) : '';
+        return `<div class="search-result-item" onclick="navigateToPost(${page},${localIdx})">
+          <div class="search-result-title">${escHtml(item.title)}</div>
+          ${dateStr ? `<div class="search-result-meta">${escHtml(dateStr)}</div>` : ''}
+        </div>`;
+      }).join('');
+      container.style.display = 'block';
+    }
+
+    function navigateToPost(page, localIdx) {
+      $('search-results').style.display = 'none';
+      $('search-input').value = '';
+      $('search-clear').style.display = 'none';
+      build(page, `post-${localIdx}`);
     }
 
     function escHtml(s) {

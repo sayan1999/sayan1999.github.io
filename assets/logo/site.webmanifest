@@ -1,11 +1,11 @@
 {
-  "name": "AI with Sayan",
-  "short_name": "AI with Sayan",
+  "name": "AI System Designs",
+  "short_name": "AI System Designs",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#FFFFFF",
   "background_color": "#fff",
-  "description": "AI with Sayan — Learn AI through real problems",
+  "description": "Engineering playbooks for modern AI stacks.",
   "icons": [
     {
       "src": "android-chrome-192x192.png",
