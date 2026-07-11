@@ -1,3 +1,9 @@
+---
+title: "ColBERT: Late Interaction Retrieval"
+date: "2026-06-18"
+description: "How ColBERT's late interaction mechanism changes the retrieval tradeoff — keeping full token-level expressiveness without the cost of cross-encoder inference at query time."
+---
+
 # ColBERT: Late Interaction Retrieval
 
 BERT, sentence-transformers — you've been using bi-encoders all along. They work. Until they **quietly don't**.

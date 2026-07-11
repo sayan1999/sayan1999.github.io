@@ -1,3 +1,9 @@
+---
+title: "Production-Ready Evals"
+date: "2026-06-19"
+description: "A practical breakdown of how to design and run evals that hold up in production — not just demos. Covers deterministic assertions, failure modes, and coverage gaps."
+---
+
 # Production-Ready Evals
 
 Your AI agent is live. Thread length is low. Retention is dropping. No error fired, no exception thrown. **You just have no signal.**

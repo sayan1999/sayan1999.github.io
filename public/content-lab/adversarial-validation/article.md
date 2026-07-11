@@ -1,3 +1,9 @@
+---
+title: "Adversarial Validation"
+date: "2026-06-16"
+description: "Using adversarial validation to detect train/test distribution shift before it silently breaks your model in production. A technique that turns data leakage into a measurable signal."
+---
+
 # Adversarial Validation
 
 Your classical ML model scored **95% in k-fold CV**. No leaks. No shortcuts. Production hit **60%**.

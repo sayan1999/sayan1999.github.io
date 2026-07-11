@@ -16,7 +16,8 @@
         return p.slug === slug;
       });
       if (post) {
-        const fullTitle = post.title + " — AI System Designs for Production";
+        const fullTitle =
+          post.title + " — AI System Designs for Production for Production";
         const desc =
           post.description || "Engineering playbooks for modern AI stacks.";
         const url =

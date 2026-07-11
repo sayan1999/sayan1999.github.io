@@ -1,3 +1,9 @@
+---
+title: "PAHF: Personalized AI Feedback"
+date: "2026-06-15"
+description: "The system design behind persistent, preference-aware AI drafting — and why naively re-prompting a model with user corrections fails every time."
+---
+
 # PAHF: Personalized AI Feedback
 
 I kept re-injecting the same feedback to my AI. Every single session.

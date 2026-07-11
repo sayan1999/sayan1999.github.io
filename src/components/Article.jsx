@@ -11,7 +11,7 @@ function formatDate(dateStr) {
 const HASHTAG_RE = /^(#\w+\s*)+$/
 
 export default function Article({ post, idx, globalIdx, onFilterTag, scrollTarget }) {
-  const { slug, title, date } = post
+  const { slug, title, date, description } = post
   const [tags, setTags] = useState([])
   const [bodyHtml, setBodyHtml] = useState(null)
   const [hashtagRows, setHashtagRows] = useState([])
@@ -50,7 +50,8 @@ export default function Article({ post, idx, globalIdx, onFilterTag, scrollTarge
     fetch(`/content-lab/${slug}/article.md`)
       .then(r => { if (!r.ok) throw new Error('not ok'); return r.text() })
       .then(md => {
-        const html = marked.parse(md)
+        const stripped = md.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
+        const html = marked.parse(stripped)
 
         // Parse the HTML to extract hashtag paragraphs
         const div = document.createElement('div')
@@ -107,6 +108,7 @@ export default function Article({ post, idx, globalIdx, onFilterTag, scrollTarge
           ))}
         </div>
         <h1 className="art-title">{title}</h1>
+        {description && <p className="art-desc">{description}</p>}
       </div>
 
       {/* PDF Carousel */}

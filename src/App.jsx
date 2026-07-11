@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Hero from './components/Hero'
+import AskAI from './components/ChatWithAI'
 import SearchBar from './components/SearchBar'
 import Article from './components/Article'
 import Pagination from './components/Pagination'
@@ -68,6 +69,7 @@ export default function App() {
       />
       <div className="content">
         <Hero />
+        <AskAI allPosts={allPosts} />
         <SearchBar
           allPosts={allPosts}
           onNavigate={handleNavigate}

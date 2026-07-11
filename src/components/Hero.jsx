@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <header className="site-hero">
       <div className="hero-eyebrow">@aiwithsayan</div>
-      <h1 className="hero-title">AI System <em>Designs</em></h1>
+      <h1 className="hero-title">AI System <em>Designs</em><br/>for Production</h1>
       <p className="hero-subtitle">Engineering playbooks for modern AI stacks.</p>
       <p className="hero-desc">
         Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.
