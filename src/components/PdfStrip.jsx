@@ -9,6 +9,8 @@ export default function PdfStrip({ slug }) {
   const nextRef = useRef(null)
   const [slideCount, setSlideCount] = useState(null)
   const [error, setError] = useState(false)
+  const [prevDisabled, setPrevDisabled] = useState(true)
+  const [nextDisabled, setNextDisabled] = useState(true)
 
   // Drag-to-scroll state
   const dragRef = useRef({ down: false, startX: 0, scrollX: 0 })
@@ -26,9 +28,7 @@ export default function PdfStrip({ slug }) {
 
         const n = pdf.numPages
         setSlideCount(n)
-
-        // Enable next button
-        if (nextRef.current) nextRef.current.disabled = false
+        setNextDisabled(false)
 
         // Clear loading placeholder
         track.innerHTML = ''
@@ -81,8 +81,8 @@ export default function PdfStrip({ slug }) {
   function updateBtns() {
     const track = trackRef.current
     if (!track) return
-    if (prevRef.current) prevRef.current.disabled = track.scrollLeft <= 4
-    if (nextRef.current) nextRef.current.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4
+    setPrevDisabled(track.scrollLeft <= 4)
+    setNextDisabled(track.scrollLeft + track.clientWidth >= track.scrollWidth - 4)
   }
 
   function scroll(dir) {
@@ -90,8 +90,18 @@ export default function PdfStrip({ slug }) {
     if (!track) return
     const card = track.querySelector('.slide-card')
     const w = card ? card.offsetWidth + 10 : 270
-    track.scrollBy({ left: dir * w * 2, behavior: 'smooth' })
+    track.scrollBy({ left: dir * w * 2 })
     setTimeout(updateBtns, 350)
+  }
+
+  function onWheel(e) {
+    const track = trackRef.current
+    if (!track) return
+    if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      e.preventDefault()
+      track.scrollBy({ left: e.shiftKey ? e.deltaY * 2 : e.deltaX * 2 })
+      setTimeout(updateBtns, 100)
+    }
   }
 
   // Drag-to-scroll handlers
@@ -113,9 +123,13 @@ export default function PdfStrip({ slug }) {
       dragRef.current.down = false
       trackRef.current?.classList.remove('grabbing')
     }
+    const track = trackRef.current
+    const handleWheel = (e) => onWheel(e)
+    if (track) track.addEventListener('wheel', handleWheel, { passive: false })
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
     return () => {
+      if (track) track.removeEventListener('wheel', handleWheel)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
     }
@@ -128,7 +142,7 @@ export default function PdfStrip({ slug }) {
           ref={prevRef}
           className="float-arrow float-arrow-l"
           onClick={() => scroll(-1)}
-          disabled
+          disabled={prevDisabled}
         >
           &#8249;
         </button>
@@ -150,15 +164,10 @@ export default function PdfStrip({ slug }) {
           ref={nextRef}
           className="float-arrow float-arrow-r"
           onClick={() => scroll(1)}
-          disabled
+          disabled={nextDisabled}
         >
           &#8250;
         </button>
-      </div>
-      <div className="strip-footer">
-        <span className="strip-slug">
-          {slideCount !== null ? `${slideCount} slides` : ''}
-        </span>
       </div>
     </div>
   )
