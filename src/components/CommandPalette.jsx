@@ -94,6 +94,14 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
     }
   }, [externalQuery, externalTrigger]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Sync textarea height whenever query changes (covers programmatic sets)
+  useEffect(() => {
+    const el = inputRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = el.scrollHeight + 'px'
+  }, [query])
+
   // Placeholder always cycles when input not focused — visible even in idle state
   useEffect(() => {
     if (focused) return

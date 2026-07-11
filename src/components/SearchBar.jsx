@@ -46,6 +46,14 @@ export default function SearchBar({ allPosts, onNavigate, externalQuery }) {
     return () => { delete window.__rebuildSearchFuse }
   }, [rebuildFuse])
 
+  // Sync textarea height whenever query changes (covers programmatic sets)
+  useEffect(() => {
+    const el = inputRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = el.scrollHeight + 'px'
+  }, [query])
+
   // Handle externalQuery (filterByTag)
   useEffect(() => {
     if (externalQuery) {
