@@ -71,10 +71,7 @@ export default function SearchBar({ allPosts, onNavigate, externalQuery }) {
   }
 
   function handleInput(e) {
-    const el = e.target
-    el.style.height = 'auto'
-    el.style.height = el.scrollHeight + 'px'
-    const q = el.value
+    const q = e.target.value
     setQuery(q)
     doSearch(q)
   }
@@ -85,7 +82,6 @@ export default function SearchBar({ allPosts, onNavigate, externalQuery }) {
 
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
-      e.preventDefault()
       const first = results[0]
       if (first) navigateTo(first)
     }
@@ -99,10 +95,7 @@ export default function SearchBar({ allPosts, onNavigate, externalQuery }) {
     setQuery('')
     setResults([])
     setOpen(false)
-    if (inputRef.current) {
-      inputRef.current.style.height = 'auto'
-      inputRef.current.focus()
-    }
+    inputRef.current?.focus()
   }
 
   function navigateTo(hit) {
@@ -142,9 +135,9 @@ export default function SearchBar({ allPosts, onNavigate, externalQuery }) {
 
   return (
     <div className="search-wrap" ref={wrapRef}>
-      <textarea
+      <input
         ref={inputRef}
-        rows={1}
+        type="search"
         className="search-input"
         placeholder="/ search articles…"
         autoComplete="off"

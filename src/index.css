@@ -681,16 +681,12 @@ body {
 
 /* ── MOBILE ── */
 @media (max-width: 640px) {
-  html {
-    font-size: 13px;
-  }
-
   :root {
-    --pad: 0.9rem;
+    --pad: 1.1rem;
   }
 
   .sidenav {
-    width: 32px;
+    width: 36px;
   }
 
   .sidenav-handle {
@@ -699,13 +695,7 @@ body {
 
   .slide-card,
   .slide-loading {
-    width: clamp(200px, 72vw, 280px);
-  }
-
-  .float-arrow {
-    width: 36px;
-    height: 36px;
-    font-size: 1.2rem;
+    width: clamp(220px, 68vw, 300px);
   }
 }
 
@@ -729,14 +719,10 @@ body {
   transition: border-color .2s;
   -webkit-appearance: none;
   appearance: none;
-  resize: none;
-  overflow: hidden;
-  display: block;
-  line-height: 1.5;
-  max-height: calc(0.72rem * 1.5 * 5 + 1.2rem); /* 5 lines */
 }
 
 .search-input::placeholder { color: var(--text3); }
+.search-input::-webkit-search-cancel-button { display: none; }
 
 .search-input:focus {
   border-color: var(--cyan);
@@ -1089,7 +1075,7 @@ body {
   flex: 1;
   position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   min-width: 0;
 }
 
@@ -1103,17 +1089,12 @@ body {
   padding: 0.9rem 0.9rem;
   outline: none;
   letter-spacing: 0.03em;
-  resize: none;
-  overflow: hidden;
-  display: block;
-  line-height: 1.5;
-  max-height: calc(0.75rem * 1.5 * 5 + 1.8rem); /* 5 lines */
 }
 
 .cp-placeholder {
   position: absolute;
   left: 0.9rem;
-  top: 0.9rem;
+  top: 50%;
   color: var(--text3);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem;
