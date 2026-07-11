@@ -2,7 +2,7 @@ To push source and deploy GitHub Pages:
 
 ```bash
 # 1. Make sure main (source repo) is up to date
-git add -A -- ':!.claude/'
+git add -A
 git commit -m "your message"
 git push origin main
 
