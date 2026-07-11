@@ -686,10 +686,6 @@ body {
   }
 
   .sidenav {
-    width: 36px;
-  }
-
-  .sidenav-handle {
     display: none;
   }
 
