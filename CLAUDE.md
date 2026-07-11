@@ -28,7 +28,7 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                              | Vite entry point — GA tags, meta, fonts                                                                |
 | `src/App.jsx`                             | Root component — manifest fetch, pagination state, permalink handling                                  |
-| `src/components/`                         | Hero, Sidebar, SearchBar, Article, PdfStrip, ShareMenu, Pagination, ChatWithAI (AskAI)                 |
+| `src/components/`                         | Hero, Sidebar, CommandPalette (unified search + Ask AI), Article, PdfStrip, ShareMenu, Pagination      |
 | `src/prompts/system-prompt.md`            | Template for the Ask AI prompt — 3 sections: static context, `{{ARTICLE_LIST}}`, `{{USER_QUERY}}`     |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |
 | `public/content-lab/manifest.json`        | **Auto-generated** by the Vite plugin in `vite.config.js` — not in git, never edit manually            |

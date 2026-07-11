@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Hero from './components/Hero'
-import AskAI from './components/ChatWithAI'
-import SearchBar from './components/SearchBar'
+import CommandPalette from './components/CommandPalette'
 import Article from './components/Article'
 import Pagination from './components/Pagination'
 import Sidebar from './components/Sidebar'
@@ -13,6 +12,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1)
   const [scrollTarget, setScrollTarget] = useState(null)
   const [filterQuery, setFilterQuery] = useState('')
+  const [filterTrigger, setFilterTrigger] = useState(0)
   const snavRef = useRef(null)
 
   useEffect(() => {
@@ -54,6 +54,7 @@ export default function App() {
 
   const handleFilterByTag = useCallback((tag) => {
     setFilterQuery(tag)
+    setFilterTrigger(t => t + 1)
   }, [])
 
   const totalPages = Math.ceil(allPosts.length / PAGE_SIZE)
@@ -69,11 +70,11 @@ export default function App() {
       />
       <div className="content">
         <Hero />
-        <AskAI allPosts={allPosts} />
-        <SearchBar
+        <CommandPalette
           allPosts={allPosts}
           onNavigate={handleNavigate}
           externalQuery={filterQuery}
+          externalTrigger={filterTrigger}
         />
         <div id="feed">
           {pagePosts.map((post, i) => (
