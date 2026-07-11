@@ -1,13 +1,15 @@
 import React, { useState, useRef } from 'react'
 import SYSTEM_PROMPT_TEMPLATE from '../prompts/system-prompt.md?raw'
 
+const favicon = domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+
 const BOTS = [
-  { id: 'chatgpt',    label: 'ChatGPT',    bg: '#10a37f', fg: '#fff', url: p => `https://chatgpt.com/?prompt=${p}&hints=search` },
-  { id: 'perplexity', label: 'Perplexity', bg: '#1fb8cd', fg: '#fff', url: p => `https://www.perplexity.ai/search?q=${p}` },
-  { id: 'claude',     label: 'Claude',     bg: '#d97757', fg: '#fff', url: p => `https://claude.ai/new?q=${p}` },
-  { id: 'grok',       label: 'Grok',       bg: '#e8e8e8', fg: '#111', url: p => `https://grok.com/?q=${p}` },
-  { id: 'googleai',   label: 'Google AI',  bg: '#4285f4', fg: '#fff', url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}` },
-  { id: 'mistral',    label: 'Mistral',    bg: '#fa6400', fg: '#fff', url: p => `https://chat.mistral.ai/chat?q=${p}` },
+  { id: 'chatgpt',    label: 'ChatGPT',    bg: '#10a37f', fg: '#fff', icon: favicon('chatgpt.com'),        url: p => `https://chatgpt.com/?prompt=${p}&hints=search` },
+  { id: 'grok',       label: 'Grok',       bg: '#e8e8e8', fg: '#111', icon: favicon('grok.com'),           url: p => `https://grok.com/?q=${p}` },
+  { id: 'perplexity', label: 'Perplexity', bg: '#1fb8cd', fg: '#fff', icon: favicon('perplexity.ai'),      url: p => `https://www.perplexity.ai/search?q=${p}` },
+  { id: 'claude',     label: 'Claude',     bg: '#d97757', fg: '#fff', icon: favicon('claude.ai'),          url: p => `https://claude.ai/new?q=${p}` },
+  { id: 'googleai',   label: 'Google AI',  bg: '#4285f4', fg: '#fff', icon: favicon('gemini.google.com'),  url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}` },
+  { id: 'mistral',    label: 'Mistral',    bg: '#fa6400', fg: '#fff', icon: favicon('mistral.ai'),         url: p => `https://chat.mistral.ai/chat?q=${p}` },
 ]
 
 function buildPrompt(allPosts, userQuery) {
@@ -54,7 +56,7 @@ export default function AskAI({ allPosts = [] }) {
               onClick={() => launch(bot)}
               style={{ '--bot-bg': bot.bg, '--bot-fg': bot.fg }}
             >
-              <span className="chai-bot-avatar">{bot.label[0]}</span>
+              <img className="chai-bot-avatar" src={bot.icon} alt={bot.label} />
               <span className="chai-bot-name">{bot.label}</span>
             </button>
           ))}

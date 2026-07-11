@@ -967,12 +967,16 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.62rem;
   letter-spacing: 0.1em;
-  color: #8b5cf6;
+  color: #fff;
+  background: #8b5cf6;
+  border: 1px solid #8b5cf6;
+  padding: 0 1.1rem;
   white-space: nowrap;
   flex-shrink: 0;
-  padding: 0 0.6rem;
   user-select: none;
   pointer-events: none;
+  display: flex;
+  align-items: center;
 }
 
 .chai-bots {
@@ -999,15 +1003,7 @@ body {
 .chai-bot-avatar {
   width: 18px;
   height: 18px;
-  border-radius: 50%;
-  background: var(--bot-bg, #444);
-  color: var(--bot-fg, #fff);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
