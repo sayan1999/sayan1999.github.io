@@ -299,49 +299,51 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
 
         {/* Always-visible bar */}
         <div className="cp-bar" onClick={() => { inputRef.current?.focus() }}>
-          <div className="cp-input-wrap">
-            <textarea
-              ref={inputRef}
-              rows={1}
-              className="cp-input"
-              autoComplete="off"
-              spellCheck="false"
-              value={query}
-              onChange={handleInput}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyDown}
-            />
-            {!query && !focused && (
-              <div className={`cp-placeholder${placeholderVisible ? ' visible' : ' hidden'}`}>
-                {placeholder}
-              </div>
-            )}
-          </div>
-
-          {mode === 'ai' && query.trim() && (
-            <div className="cp-send-wrap">
-              <button className="cp-send-btn" onMouseDown={e => e.preventDefault()} onClick={e => { e.stopPropagation(); handleSend() }}>
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8L2 2l3 6-3 6 12-6z" fill="currentColor"/></svg>
-              </button>
-              {showBotPopover && (
-                <div className="cp-bot-float">
-                  {BOTS.map(bot => (
-                    <button key={bot.id} className="cp-bot-card" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
-                      <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
-                      <span className="cp-bot-name">{bot.label}</span>
-                    </button>
-                  ))}
+          <div className="cp-input-row">
+            <div className="cp-input-wrap">
+              <textarea
+                ref={inputRef}
+                rows={1}
+                className="cp-input"
+                autoComplete="off"
+                spellCheck="false"
+                value={query}
+                onChange={handleInput}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
+              />
+              {!query && !focused && (
+                <div className={`cp-placeholder${placeholderVisible ? ' visible' : ' hidden'}`}>
+                  {placeholder}
                 </div>
               )}
             </div>
-          )}
-          {query && (
-            <button
-              className="cp-clear-btn"
-              onMouseDown={e => { e.preventDefault(); setQuery(''); setSearchResults([]); setActiveIdx(-1); setShowBotPopover(false); if (inputRef.current) { inputRef.current.style.height = 'auto'; inputRef.current.focus() } }}
-            >×</button>
-          )}
+
+            {mode === 'ai' && query.trim() && (
+              <div className="cp-send-wrap">
+                <button className="cp-send-btn" onMouseDown={e => e.preventDefault()} onClick={e => { e.stopPropagation(); handleSend() }}>
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8L2 2l3 6-3 6 12-6z" fill="currentColor"/></svg>
+                </button>
+                {showBotPopover && (
+                  <div className="cp-bot-float">
+                    {BOTS.map(bot => (
+                      <button key={bot.id} className="cp-bot-card" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
+                        <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
+                        <span className="cp-bot-name">{bot.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {query && (
+              <button
+                className="cp-clear-btn"
+                onMouseDown={e => { e.preventDefault(); setQuery(''); setSearchResults([]); setActiveIdx(-1); setShowBotPopover(false); if (inputRef.current) { inputRef.current.style.height = 'auto'; inputRef.current.focus() } }}
+              >×</button>
+            )}
+          </div>
 
           <div className="cp-toggle">
             <button

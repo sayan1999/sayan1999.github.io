@@ -1048,7 +1048,14 @@ body {
   cursor: text;
 }
 
-/* Mode toggle — right side of bar */
+.cp-input-row {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Mode toggle — right side of bar (desktop) */
 .cp-toggle {
   display: flex;
   flex-shrink: 0;
@@ -1284,5 +1291,27 @@ body {
 }
 
 @media (max-width: 640px) {
-  .cp-toggle-btn { padding: 0.5rem 0.6rem; font-size: 0.54rem; }
+  .cp-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cp-toggle {
+    order: -1;
+    border-left: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+  }
+
+  .cp-toggle-btn {
+    flex: 1;
+    padding: 0.55rem 0.6rem;
+    font-size: 0.54rem;
+    text-align: center;
+  }
+
+  .cp-input-row {
+    order: 0;
+    width: 100%;
+  }
 }
