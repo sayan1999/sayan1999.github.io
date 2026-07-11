@@ -152,7 +152,10 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
   }
 
   function handleInput(e) {
-    const q = e.target.value
+    const el = e.target
+    el.style.height = 'auto'
+    el.style.height = el.scrollHeight + 'px'
+    const q = el.value
     setQuery(q)
     setShowBotPopover(false)
     if (mode === 'search') doSearch(q)
@@ -186,6 +189,7 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
       }
     }
     if (e.key === 'Enter') {
+      e.preventDefault()
       if (mode === 'search') {
         if (searchResults[0]) navigateTo(searchResults[0])
       } else if (query.trim()) {
@@ -288,10 +292,10 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
         {/* Always-visible bar */}
         <div className="cp-bar" onClick={() => { inputRef.current?.focus() }}>
           <div className="cp-input-wrap">
-            <input
+            <textarea
               ref={inputRef}
+              rows={1}
               className="cp-input"
-              type="text"
               autoComplete="off"
               spellCheck="false"
               value={query}
@@ -327,7 +331,7 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
           {query && (
             <button
               className="cp-clear-btn"
-              onMouseDown={e => { e.preventDefault(); setQuery(''); setSearchResults([]); setActiveIdx(-1); setShowBotPopover(false); inputRef.current?.focus() }}
+              onMouseDown={e => { e.preventDefault(); setQuery(''); setSearchResults([]); setActiveIdx(-1); setShowBotPopover(false); if (inputRef.current) { inputRef.current.style.height = 'auto'; inputRef.current.focus() } }}
             >×</button>
           )}
 

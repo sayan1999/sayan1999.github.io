@@ -713,12 +713,17 @@ body {
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem;
+  line-height: 1.5;
   padding: 0.6rem 2.4rem 0.6rem 0.9rem;
   outline: none;
   letter-spacing: 0.04em;
   transition: border-color .2s;
   -webkit-appearance: none;
   appearance: none;
+  resize: none;
+  overflow: hidden;
+  display: block;
+  max-height: calc(0.72rem * 1.5 * 5 + 1.2rem);
 }
 
 .search-input::placeholder { color: var(--text3); }
@@ -1075,7 +1080,7 @@ body {
   flex: 1;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   min-width: 0;
 }
 
@@ -1086,15 +1091,20 @@ body {
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
+  line-height: 1.5;
   padding: 0.9rem 0.9rem;
   outline: none;
   letter-spacing: 0.03em;
+  resize: none;
+  overflow: hidden;
+  display: block;
+  max-height: calc(0.75rem * 1.5 * 5 + 1.8rem);
 }
 
 .cp-placeholder {
   position: absolute;
   left: 0.9rem;
-  top: 50%;
+  top: 0.9rem;
   color: var(--text3);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem;
