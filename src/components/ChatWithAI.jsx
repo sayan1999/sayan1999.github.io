@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import SYSTEM_PROMPT_TEMPLATE from '../prompts/system-prompt.md?raw'
 
 const BOTS = [
-  { id: 'chatgpt',    label: 'ChatGPT',    bg: '#10a37f', fg: '#fff', url: p => `https://chatgpt.com/?q=${p}` },
+  { id: 'chatgpt',    label: 'ChatGPT',    bg: '#10a37f', fg: '#fff', url: p => `https://chatgpt.com/?prompt=${p}&hints=search` },
   { id: 'perplexity', label: 'Perplexity', bg: '#1fb8cd', fg: '#fff', url: p => `https://www.perplexity.ai/search?q=${p}` },
   { id: 'claude',     label: 'Claude',     bg: '#d97757', fg: '#fff', url: p => `https://claude.ai/new?q=${p}` },
   { id: 'grok',       label: 'Grok',       bg: '#e8e8e8', fg: '#111', url: p => `https://grok.com/?q=${p}` },
@@ -22,17 +22,9 @@ function buildPrompt(allPosts, userQuery) {
 
 export default function AskAI({ allPosts = [] }) {
   const [prompt, setPrompt] = useState('')
-  const [showBots, setShowBots] = useState(false)
   const inputRef = useRef(null)
 
-  const handleAsk = () => {
-    if (prompt.trim()) setShowBots(true)
-  }
-
-  const handleChange = e => {
-    setPrompt(e.target.value)
-    if (showBots) setShowBots(false)
-  }
+  const showBots = prompt.trim().length > 0
 
   const launch = bot => {
     const full = buildPrompt(allPosts, prompt)
@@ -48,12 +40,9 @@ export default function AskAI({ allPosts = [] }) {
           type="text"
           placeholder="Ask AI..."
           value={prompt}
-          onChange={handleChange}
-          onKeyDown={e => { if (e.key === 'Enter') handleAsk() }}
+          onChange={e => setPrompt(e.target.value)}
         />
-        <button className="chai-ask-btn" onClick={handleAsk} disabled={!prompt.trim()}>
-          ✦ ASK AI
-        </button>
+        <span className="chai-ask-label">✦ ASK AI</span>
       </div>
 
       {showBots && (

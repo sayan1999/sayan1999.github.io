@@ -963,21 +963,17 @@ body {
 .chai-input::placeholder { color: var(--text3); }
 .chai-input:focus { border-color: #8b5cf6; }
 
-.chai-ask-btn {
+.chai-ask-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.62rem;
   letter-spacing: 0.1em;
-  color: #fff;
-  background: #8b5cf6;
-  border: 1px solid #8b5cf6;
-  padding: 0 1.1rem;
-  cursor: pointer;
+  color: #8b5cf6;
   white-space: nowrap;
-  transition: background .15s;
   flex-shrink: 0;
+  padding: 0 0.6rem;
+  user-select: none;
+  pointer-events: none;
 }
-.chai-ask-btn:hover:not(:disabled) { background: #7c3aed; border-color: #7c3aed; }
-.chai-ask-btn:disabled { cursor: not-allowed; }
 
 .chai-bots {
   display: flex;
