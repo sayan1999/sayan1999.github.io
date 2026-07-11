@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "production-ready-evals",
+    "title": "Production-Ready Evals",
+    "date": "2026-06-19",
+    "description": "A practical breakdown of how to design and run evals that hold up in production — not just demos. Covers deterministic assertions, failure modes, and coverage gaps."
+  },
+  {
+    "slug": "colbert",
+    "title": "ColBERT: Late Interaction Retrieval",
+    "date": "2026-06-18",
+    "description": "How ColBERT's late interaction mechanism changes the retrieval tradeoff — keeping full token-level expressiveness without the cost of cross-encoder inference at query time."
+  },
+  {
+    "slug": "adversarial-validation",
+    "title": "Adversarial Validation",
+    "date": "2026-06-16",
+    "description": "Using adversarial validation to detect train/test distribution shift before it silently breaks your model in production. A technique that turns data leakage into a measurable signal."
+  },
+  {
+    "slug": "pahf-interactive-drafting",
+    "title": "PAHF: Personalized AI Feedback",
+    "date": "2026-06-15",
+    "description": "The system design behind persistent, preference-aware AI drafting — and why naively re-prompting a model with user corrections fails every time."
+  }
+]
