@@ -4,8 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI System Designs</title>
-  <meta name="description" content="Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents. Focused strictly on system design, deterministic testing, and edge cases. Built for engineers moving models from prototype to production.">
+  <title>AI System Designs for Production</title>
+  <meta name="description"
+    content="Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents. Focused strictly on system design, deterministic testing, and edge cases. Built for engineers moving models from prototype to production.">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=GT-MR298GD"></script>
   <script>
@@ -17,16 +18,18 @@
   </script>
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AI System Designs">
-  <meta property="og:title" content="AI System Designs">
-  <meta property="og:description" content="Engineering playbooks for modern AI stacks. Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.">
+  <meta property="og:site_name" content="AI System Designs for Production">
+  <meta property="og:title" content="AI System Designs for Production">
+  <meta property="og:description"
+    content="Engineering playbooks for modern AI stacks. Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.">
   <meta property="og:url" content="https://sayan1999.github.io/">
   <meta property="og:image" content="https://sayan1999.github.io/assets/logo/apple-touch-icon.png">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@aiwithsayan">
-  <meta name="twitter:title" content="AI System Designs">
-  <meta name="twitter:description" content="Engineering playbooks for modern AI stacks. Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.">
+  <meta name="twitter:title" content="AI System Designs for Production">
+  <meta name="twitter:description"
+    content="Engineering playbooks for modern AI stacks. Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.">
   <meta name="twitter:image" content="https://sayan1999.github.io/assets/logo/apple-touch-icon.png">
 
   <link rel="apple-touch-icon" sizes="180x180" href="assets/logo/apple-touch-icon.png">
@@ -251,7 +254,10 @@
       cursor: pointer;
       transition: opacity .15s;
     }
-    .atag:hover { opacity: 1; }
+
+    .atag:hover {
+      opacity: 1;
+    }
 
     .atag-dash {
       color: var(--text3);
@@ -604,7 +610,11 @@
       cursor: pointer;
       transition: color .15s, border-color .15s;
     }
-    .htag:hover { color: var(--gold); border-color: var(--gold); }
+
+    .htag:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
 
     .skel {
       height: 0.9rem;
@@ -762,8 +772,13 @@
       appearance: none;
     }
 
-    .search-input::placeholder { color: var(--text3); }
-    .search-input::-webkit-search-cancel-button { display: none; }
+    .search-input::placeholder {
+      color: var(--text3);
+    }
+
+    .search-input::-webkit-search-cancel-button {
+      display: none;
+    }
 
     .search-input:focus {
       border-color: var(--cyan);
@@ -785,7 +800,9 @@
       transition: color .15s;
     }
 
-    .search-clear:hover { color: var(--text); }
+    .search-clear:hover {
+      color: var(--text);
+    }
 
     .search-results {
       position: absolute;
@@ -807,8 +824,13 @@
       transition: background .12s;
     }
 
-    .search-result-item:last-child { border-bottom: none; }
-    .search-result-item:hover { background: var(--surface2); }
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-item:hover {
+      background: var(--surface2);
+    }
 
     .search-result-title {
       font-size: 0.82rem;
@@ -859,8 +881,18 @@
       cursor: pointer;
       transition: color .2s, border-color .2s;
     }
-    .share-btn svg { width: 11px; height: 11px; fill: var(--cyan); flex-shrink: 0; }
-    .share-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+
+    .share-btn svg {
+      width: 11px;
+      height: 11px;
+      fill: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .share-btn:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
 
     .share-menu {
       position: absolute;
@@ -874,9 +906,12 @@
       gap: 0.6rem;
       z-index: 200;
       white-space: nowrap;
-      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
     }
-    .share-menu.open { display: flex; }
+
+    .share-menu.open {
+      display: flex;
+    }
 
     .share-icon {
       display: flex;
@@ -893,13 +928,36 @@
       text-decoration: none;
       flex-shrink: 0;
     }
-    .share-icon svg { width: 17px; height: 17px; fill: currentColor; }
-    .share-icon:hover { transform: scale(1.2); }
-    .share-icon.whatsapp:hover  { color: #25d366; }
-    .share-icon.twitter:hover   { color: #e4e4e4; }
-    .share-icon.reddit:hover    { color: #ff4500; }
-    .share-icon.instagram:hover { color: #e1306c; }
-    .share-icon.copylink:hover  { color: var(--cyan); }
+
+    .share-icon svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    .share-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .share-icon.whatsapp:hover {
+      color: #25d366;
+    }
+
+    .share-icon.twitter:hover {
+      color: #e4e4e4;
+    }
+
+    .share-icon.reddit:hover {
+      color: #ff4500;
+    }
+
+    .share-icon.instagram:hover {
+      color: #e1306c;
+    }
+
+    .share-icon.copylink:hover {
+      color: var(--cyan);
+    }
 
     .share-divider {
       width: 1px;
@@ -916,7 +974,7 @@
       display: none;
     }
 
-.page-nav {
+    .page-nav {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -975,7 +1033,9 @@
         <div class="hero-eyebrow">@aiwithsayan</div>
         <h1 class="hero-title">AI System <em>Designs</em></h1>
         <p class="hero-subtitle">Engineering playbooks for modern AI stacks.</p>
-        <p class="hero-desc">Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents. Focused strictly on system design, deterministic testing, and edge cases. Built for engineers moving models from prototype to production.</p>
+        <p class="hero-desc">Practical breakdowns of retrieval systems, evaluation mechanics, and autonomous agents.
+          Focused strictly on system design, deterministic testing, and edge cases. Built for engineers moving models
+          from prototype to production.</p>
         <div class="hero-divider"></div>
         <div class="hero-meta">
           <span>Sayan Dey</span>
@@ -987,7 +1047,8 @@
       </header>
 
       <div class="search-wrap">
-        <input type="search" id="search-input" class="search-input" placeholder="/ search articles…" autocomplete="off" spellcheck="false" />
+        <input type="search" id="search-input" class="search-input" placeholder="/ search articles…" autocomplete="off"
+          spellcheck="false" />
         <button class="search-clear" id="search-clear" aria-label="Clear search">×</button>
         <div class="search-results" id="search-results"></div>
       </div>
@@ -1392,8 +1453,8 @@
     const fuseOptions = {
       keys: [
         { name: 'title', weight: 2 },
-        { name: 'tags',  weight: 1.5 },
-        { name: 'slug',  weight: 0.5 },
+        { name: 'tags', weight: 1.5 },
+        { name: 'slug', weight: 0.5 },
       ],
       threshold: 0.4,
       includeMatches: true,
