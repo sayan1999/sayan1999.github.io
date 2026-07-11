@@ -28,7 +28,7 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                              | Vite entry point — GA tags, meta, fonts                                                                |
 | `src/App.jsx`                             | Root component — manifest fetch, pagination state, permalink handling                                  |
-| `src/components/`                         | Hero, Sidebar, CommandPalette (unified search + Ask AI), Article, PdfStrip, ShareMenu, Pagination      |
+| `src/components/`                         | Hero, Sidebar, SearchBar, CommandPalette (Ask AI + bot routing), ChatWithAI, Article, PdfStrip, ShareMenu, Pagination |
 | `src/prompts/system-prompt.md`            | Template for the Ask AI prompt — 3 sections: static context, `{{ARTICLE_LIST}}`, `{{USER_QUERY}}`     |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |
 | `public/content-lab/manifest.json`        | **Auto-generated** by the Vite plugin in `vite.config.js` — not in git, never edit manually            |
@@ -45,8 +45,24 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 - **Tags** are auto-extracted from lines matching `/^(#\w+\s*)+$/` in `article.md` — hashtags must be on their own paragraph.
 - **Social sharing** routes through `articles/share.html?slug=X` to inject OG meta before redirecting to `/?post=X`.
 - **PDF rendering** upscales by `devicePixelRatio` for retina sharpness. Worker loaded from CDN: `pdf.js` v3.11.174.
+- **PDF slide modal**: clicking any slide card opens a fullscreen modal (backdrop blur, scale-in animation). Supports keyboard arrows (←→), touch swipe left/right, and backdrop-click to close. Drag-to-scroll on the strip is distinguished from a tap via a `moved` flag — only clean taps open the modal.
+- **Search** (`SearchBar.jsx`) is a standalone sidebar component — auto-growing textarea (max 5 rows), Fuse.js fuzzy search, `/` shortcut to focus. `CommandPalette` is the separate Ask AI + bot-routing panel.
 - npm packages: `pdfjs-dist`, `marked`, `fuse.js`. The pdf.js worker is loaded from CDN (`cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js`) to avoid bundling issues.
 - Do not duplicate content between `manifest.json` (title/description/date) and `article.md` (caption/tags) — each field has exactly one source of truth.
+
+## Mobile vs Desktop Behavior
+
+The breakpoint is **640px** (`@media (max-width: 640px)`). Key differences to be aware of when touching layout or components:
+
+| Concern | Desktop | Mobile |
+|---|---|---|
+| Sidenav | Visible sticky sidebar | Hidden (`display: none`) |
+| PDF card width | `clamp(280px, 30vw, 400px)` via CSS + JS | `clamp(220px, 68vw, 300px)` via CSS + JS mirror |
+| CommandPalette | Toggle row beside input row | Toggle row stacks **above** input row |
+| PDF modal nav | Arrow keys + prev/next buttons | Touch swipe left/right + buttons |
+| Search input | Auto-grow textarea, max 5 rows | Same |
+
+**Critical:** `PdfStrip.jsx` computes `CARD_W` in JS (used for canvas render resolution) and must mirror the CSS clamp exactly — if you change the mobile CSS card width, update the JS `isMobile` branch on the same line too, or canvases will render at the wrong size and get clipped.
 
 ## Maintaining & Deploying
 
@@ -76,12 +92,6 @@ npm run dev       # Vite dev server at http://localhost:5173
 2. Add `public/content-lab/<slug>/artifact.pdf` (1080×1350 px slides)
 
 `manifest.json` is auto-generated — `npm run dev` or `npm run deploy` picks it up automatically. No other changes needed.
-
-### Developement mode testing
-
-```bash
-npm run dev
-```
 
 ### Deploying to GitHub Pages
 

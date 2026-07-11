@@ -296,7 +296,7 @@ body {
 .strip-track {
   display: flex;
   gap: 12px;
-  padding: 1.5rem 1.75rem;
+  padding: 1.5rem 0.5rem;
   overflow-x: scroll;
   scroll-behavior: smooth;
   scrollbar-width: none;
@@ -360,6 +360,116 @@ body {
   color: var(--text3);
   letter-spacing: 0.1em;
   animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* ── PDF SLIDE MODAL ── */
+.slide-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modal-in 0.18s ease;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.slide-modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 90vw;
+  animation: modal-scale-in 0.18s ease;
+}
+
+@keyframes modal-scale-in {
+  from { transform: scale(0.94); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.slide-modal-canvas-wrap {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+
+.slide-modal-canvas-wrap canvas {
+  display: block;
+}
+
+.slide-modal-spinner {
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+}
+
+.slide-modal-close {
+  position: absolute;
+  top: -36px;
+  right: 0;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.slide-modal-close:hover {
+  color: #fff;
+}
+
+.slide-modal-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.slide-modal-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-modal-btn:hover:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.slide-modal-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.slide-modal-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  min-width: 48px;
+  text-align: center;
 }
 
 @keyframes pulse {
