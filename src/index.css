@@ -1156,7 +1156,7 @@ body {
 
 .cp-input-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex: 1;
   min-width: 0;
 }
@@ -1342,17 +1342,14 @@ body {
   color: var(--text3);
 }
 
-/* Send wrapper — anchor point for the bot float */
+/* Send wrapper */
 .cp-send-wrap {
-  position: relative;
   flex-shrink: 0;
 }
 
-/* Bot float — vertical list anchored below the send button */
+/* Bot float — vertical list, positioned via inline fixed style */
 .cp-bot-float {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 6px);
+  position: fixed;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1360,9 +1357,9 @@ body {
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 10px;
   padding: 6px;
-  z-index: 100;
+  z-index: 9999;
   box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  min-width: 148px;
+  width: max-content;
 }
 
 .cp-bot-card {

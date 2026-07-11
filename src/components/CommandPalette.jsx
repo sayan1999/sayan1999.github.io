@@ -68,8 +68,20 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
   const frameRef = useRef(null)
   const fuseRef = useRef(null)
   const blurTimerRef = useRef(null)
+  const sendWrapRef = useRef(null)
+  const botFloatRef = useRef(null)
+  const [botPos, setBotPos] = useState(null)
 
   const dropdownOpen = focused || (mode === 'search' && !!query) || searchResults.length > 0
+
+  useEffect(() => {
+    if (showBotPopover && sendWrapRef.current) {
+      const rect = sendWrapRef.current.getBoundingClientRect()
+      setBotPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right })
+    } else {
+      setBotPos(null)
+    }
+  }, [showBotPopover])
 
   useEffect(() => {
     if (allPosts.length > 0) fuseRef.current = new Fuse(allPosts, fuseOptions)
@@ -124,7 +136,11 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
   // Close dropdown on outside click
   useEffect(() => {
     const handler = e => {
-      if (!frameRef.current?.contains(e.target)) {
+      // Check if the click is outside BOTH the frame and the bot float
+      if (
+        !frameRef.current?.contains(e.target) && 
+        !botFloatRef.current?.contains(e.target)
+      ) {
         clearTimeout(blurTimerRef.current)
         setFocused(false)
         setShowBotPopover(false)
@@ -295,6 +311,16 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
 
   return (
     <div className="cp-section">
+      {showBotPopover && botPos && (
+        <div className="cp-bot-float" ref={botFloatRef} style={{ top: botPos.top, right: botPos.right }}>
+          {BOTS.map(bot => (
+            <button key={bot.id} className="cp-bot-card" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
+              <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
+              <span className="cp-bot-name">{bot.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
       <div className={`cp-frame${dropdownOpen || showBotPopover ? ' open' : ''}`} ref={frameRef}>
 
         {/* Always-visible bar */}
@@ -321,20 +347,10 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
             </div>
 
             {mode === 'ai' && query.trim() && (
-              <div className="cp-send-wrap">
+              <div className="cp-send-wrap" ref={sendWrapRef}>
                 <button className="cp-send-btn" onMouseDown={e => e.preventDefault()} onClick={e => { e.stopPropagation(); handleSend() }}>
                   <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8L2 2l3 6-3 6 12-6z" fill="currentColor"/></svg>
                 </button>
-                {showBotPopover && (
-                  <div className="cp-bot-float">
-                    {BOTS.map(bot => (
-                      <button key={bot.id} className="cp-bot-card" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
-                        <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
-                        <span className="cp-bot-name">{bot.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
             )}
             {query && (
