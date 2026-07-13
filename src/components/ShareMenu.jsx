@@ -24,7 +24,7 @@ export default function ShareMenu({ slug, title }) {
   const [copied, setCopied] = useState(false)
   const wrapRef = useRef(null)
 
-  const shareUrl = window.location.origin + '/articles/share.html?slug=' + encodeURIComponent(slug)
+  const shareUrl = window.location.origin + '/?post=' + encodeURIComponent(slug)
 
   function toggle() {
     setOpen(v => !v)

@@ -16,7 +16,7 @@ const BOTS = [
 function TalkToAI({ slug, title }) {
   const [open, setOpen] = useState(false)
   const wrapRef = useRef(null)
-  const shareUrl = window.location.origin + '/articles/share.html?slug=' + encodeURIComponent(slug)
+  const shareUrl = window.location.origin + '/?post=' + encodeURIComponent(slug)
   const prompt = `Hey! I just read this amazing article about "${title}" on ${shareUrl} — let's dig into it!`
 
   useEffect(() => {

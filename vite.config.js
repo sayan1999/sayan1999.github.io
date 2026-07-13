@@ -108,7 +108,7 @@ function manifestPlugin(siteUrl) {
 
     writeBundle(options) {
       const outDir = options.dir || join(process.cwd(), 'dist')
-      for (const rel of ['articles/share.html', 'robots.txt', 'llms.txt']) {
+      for (const rel of ['robots.txt', 'llms.txt']) {
         const p = join(outDir, rel)
         if (existsSync(p))
           writeFileSync(p, readFileSync(p, 'utf8').replaceAll('__SITE_URL__', siteUrl))
