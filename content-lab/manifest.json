@@ -3,24 +3,51 @@
     "slug": "production-ready-evals",
     "title": "Production-Ready Evals",
     "date": "2026-06-19",
-    "description": "A practical breakdown of how to design and run evals that hold up in production — not just demos. Covers deterministic assertions, failure modes, and coverage gaps."
+    "description": "A practical breakdown of how to design and run evals that hold up in production — not just demos. Covers deterministic assertions, failure modes, and coverage gaps.",
+    "tags": [
+      "LLMEvals",
+      "AIEngineering",
+      "AgenticAI",
+      "AIAgent"
+    ],
+    "body": "production ready evals ai agent live thread length low retention dropping no error fired no exception thrown just no signal s problem nobody talks not crash silence engineers reach third party eval tool point beautiful dashboard generic scores flowing relevance 8 10 coherence 9 10 looks progress metrics know nothing domain users went no visibility fake visibility two types failures hard failures exceptions tool call failures malformed json structured outputs code already sees write fast boolean assertions format schema tool responses run every change no llm needed zero cost per run soft failures agent responds just responds wrong off tone misses intent gives plausible sounding bad answer code t catch eval already s people miss already eval soft failures just ran go chat logs classify frustrated conversations short threads repeated rephrasing abrupt drop offs users already telling s broken cluster failure patterns surface building ground truth pull top 200 frequent queries system hand 50 100 domain expert not engineer someone knows correct answer looks domain binary labels one line reasoning dataset golden standard llm judge fix lock build llm judge aligned labels run pairs measure agreement score iterate judge prompt until thinks domain expert does run against failure clusters fix agent numbers move proof not feeling lock fix unit test so regresses silently full evolution nothing catch breaks unit tests hard failures measure degrades llm judge soft failures fix proof ground truth eval loop eval setup evolve last ai agent worked"
   },
   {
     "slug": "colbert",
     "title": "ColBERT: Late Interaction Retrieval",
     "date": "2026-06-18",
-    "description": "How ColBERT's late interaction mechanism changes the retrieval tradeoff — keeping full token-level expressiveness without the cost of cross-encoder inference at query time."
+    "description": "How ColBERT's late interaction mechanism changes the retrieval tradeoff — keeping full token-level expressiveness without the cost of cross-encoder inference at query time.",
+    "tags": [
+      "RAG",
+      "InformationRetrieval",
+      "NLP",
+      "VectorSearch"
+    ],
+    "body": "colbert late interaction retrieval bert sentence transformers ve using bi encoders along work until quietly don t bi encoder encodes query one vector document one vector scores cosine similarity fast scalable works great short text feed long document starts losing model compresses everything every sentence every specific detail single 768 dimensional vector query asks something precise answer document embedding averaged away why cross encoders aren t answer fix seemed obvious cross encoders feed query document together let every token attend every token score jointly quality jumps problem t precompute anything every query requires full bert forward pass per document 100m documents s 100m bert calls per query cross encoders rerankers not retrievers colbert does differently colbert reframes question instead one vector per document keep every token s own embedding encode query document separately so documents stay precomputable interact late query token find its best matching document token sum scores maxsim query token finds its best matching doc token sum token level matching means specific phrase 10 000 word document surface nothing gets averaged away trade off storage multiplies average token count infrastructure gets complex long document retrieval s architecture doesn t force choice speed precision production bi encoder retrieves top 1000 fast colbert reranks top 1000 precise stage does s actually good part retrieval pipeline found hardest right retriever reranker chunking strategy upstream"
   },
   {
     "slug": "adversarial-validation",
     "title": "Adversarial Validation",
     "date": "2026-06-16",
-    "description": "Using adversarial validation to detect train/test distribution shift before it silently breaks your model in production. A technique that turns data leakage into a measurable signal."
+    "description": "Using adversarial validation to detect train/test distribution shift before it silently breaks your model in production. A technique that turns data leakage into a measurable signal.",
+    "tags": [
+      "MachineLearning",
+      "DataScience",
+      "MLOps"
+    ],
+    "body": "adversarial validation classical ml model scored 95 k fold cv no leaks no shortcuts production hit 60 validation wasn t broken blind k fold shuffles within training set checks training data matches world model runs 100 features traditional drift detection makes worse ks tests per feature psi arbitrary thresholds pca t tell actually matters model adversarial validation solves one pass works label train 0 test 1 train binary classifier read auc auc 0 5 distributions match cv trustworthy auc 0 7 severe shift cv scores lying adversarial model tells features drifted lets build validation fold actually mirrors test environment set cron job auc crosses 0 7 alert fires model stops walking world hasn t seen ever cv scores looked clean production told different story"
   },
   {
     "slug": "pahf-interactive-drafting",
     "title": "PAHF: Personalized AI Feedback",
     "date": "2026-06-15",
-    "description": "The system design behind persistent, preference-aware AI drafting — and why naively re-prompting a model with user corrections fails every time."
+    "description": "The system design behind persistent, preference-aware AI drafting — and why naively re-prompting a model with user corrections fails every time.",
+    "tags": [
+      "AI",
+      "MachineLearning",
+      "AgenticAI",
+      "PAHF"
+    ],
+    "body": "pahf personalized ai feedback kept re injecting feedback ai every single session tone correction structure note stop explaining re write lot creative technical collaboratively ai every new session starting scratch assumed memory problem wasn t adding semantic memory helped partially agent retrieve preferred concise writing guessed wrong constantly worse stored inferred corrections not actually approved so memory polluted fast cupcake problem think ask ai cake makes cupcake correct birthday cake updates its memory already spent tokens wrong output stored birthday cake inferred correction not confirmed one next time ask something sweet confident wrong answer again actually fixed fix built agent asks acts m cupcake right say no locks birthday cake acts memory updates confirm final output later want wedding cake instead update one preference no full re teach no session replay no wasted tokens pattern name turns meta ai named exact pattern early 2026 pahf personalized agents human feedback core idea three step inference time loop 1 pre action clarification eliminate assumption errors generating 2 grounding retrieve approved preferences generating 3 post action feedback write back confirmed semantic memory learns agent pahf learns approved distinction whole thing built sidecar service frontend plug feedback find yourself re injecting every session"
   }
 ]

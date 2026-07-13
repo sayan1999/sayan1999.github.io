@@ -1,0 +1,27 @@
+# AI System Designs for Production — @aiwithsayan
+
+> Author: Sayan Dey (@aiwithsayan)
+> Site: https://sayan1999.github.io
+> Contact: mr.sayan.dey@gmail.com
+> Updated: 2026-07-13
+
+## About
+
+Engineering-first deep dives on deploying AI in production. Every post is a cookbook-style breakdown of a specific system design problem — retrieval, evaluation, personalization, and agent orchestration. Written for engineers moving models from prototype to production, not for hype.
+
+No filler. High fact density. Benchmarks and failure modes included.
+
+## Articles
+
+- [Adversarial Validation](https://sayan1999.github.io/?post=adversarial-validation): Using adversarial validation to detect train/test distribution shift before it silently breaks your model in production. Turns data leakage into a measurable signal.
+- [ColBERT: Late Interaction Retrieval](https://sayan1999.github.io/?post=colbert): How ColBERT's late interaction mechanism changes the retrieval tradeoff — keeping full token-level expressiveness without the cost of cross-encoder inference at query time.
+- [PAHF: Personalized AI Feedback](https://sayan1999.github.io/?post=pahf-interactive-drafting): The system design behind persistent, preference-aware AI drafting — and why naively re-prompting a model with user corrections fails every time.
+- [Production-Ready Evals](https://sayan1999.github.io/?post=production-ready-evals): How to design and run evals that hold up in production — not just demos. Covers deterministic assertions, failure modes, and coverage gaps.
+
+## Full article index
+
+https://sayan1999.github.io/content-lab/manifest.json
+
+## Sitemap
+
+https://sayan1999.github.io/sitemap.xml
