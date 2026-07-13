@@ -30,6 +30,7 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | `src/App.jsx`                             | Root component — manifest fetch, pagination state, path-based post routing (`/post/<slug>/`)           |
 | `src/components/`                         | Hero (search + Ask AI + bot routing), Article, ArticlePage (PDF + share), ShareMenu, Pagination, Footer — `SearchBar.jsx`, `CommandPalette.jsx`, `ChatWithAI.jsx` exist but are unused |
 | `src/prompts/ask-ai-prompt.md`            | System prompt template for the Ask AI feature — uses `{{SITE_URL}}` and `{{USER_QUERY}}` placeholders  |
+| `src/prompts/discuss-article-prompt.md`   | Prompt sent when a user clicks "discuss this article" — uses `{{TITLE}}` and `{{ARTICLE_URL}}` placeholders |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |
 | `public/content-lab/manifest.json`        | **Auto-generated** by the Vite plugin in `vite.config.js` — not in git, never edit manually            |
 | `public/content-lab/<slug>/article.md`    | YAML frontmatter (`title`, `date`, `description`) + post caption; hashtag lines auto-extracted as tags |
@@ -55,6 +56,7 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 - **Never hardcode the site URL** (`https://sayan1999.github.io` or any variant) anywhere in source files. Always use the `__SITE_URL__` placeholder in static files (replaced at build time) or `import.meta.env.VITE_SITE_URL` in JS/JSX. Hardcoding breaks local dev, staging, and any future domain changes.
 - Do not duplicate content between `manifest.json` (title/description/date) and `article.md` (caption/tags) — each field has exactly one source of truth.
 - **Post URLs use path routing**, not query params. In the SPA, opening a post pushes `/post/<slug>/` to history (never `?post=`). Share links in `ShareMenu.jsx` and `ArticlePage.jsx` use `window.location.origin + '/post/' + slug + '/'`. The static file at `dist/post/<slug>/index.html` is what GitHub Pages actually serves when someone navigates directly to that URL.
+- **`?q=` search param is restored on page load.** When `Hero.jsx`'s `allPosts` effect fires (after manifest loads), it reads `?q=` from the URL and auto-runs Fuse search — so sharing a search URL like `/?q=rag` works correctly.
 
 ## Mobile vs Desktop Behavior
 

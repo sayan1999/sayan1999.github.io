@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { marked } from 'marked'
 import * as pdfjsLib from 'pdfjs-dist'
 import ShareMenu from './ShareMenu'
+import DISCUSS_PROMPT_TEMPLATE from '../prompts/discuss-article-prompt.md?raw'
 
 const favicon = d => `https://www.google.com/s2/favicons?domain=${d}&sz=64`
 const BOTS = [
@@ -17,7 +18,10 @@ function TalkToAI({ slug, title }) {
   const [open, setOpen] = useState(false)
   const wrapRef = useRef(null)
   const shareUrl = window.location.origin + '/post/' + slug + '/'
-  const prompt = `Hey! I just read this amazing article about "${title}" on ${shareUrl} — let's dig into it!`
+  const prompt = DISCUSS_PROMPT_TEMPLATE
+    .replace('{{TITLE}}', title)
+    .replace('{{ARTICLE_URL}}', shareUrl)
+    .trim()
 
   useEffect(() => {
     function onDoc(e) { if (!wrapRef.current?.contains(e.target)) setOpen(false) }

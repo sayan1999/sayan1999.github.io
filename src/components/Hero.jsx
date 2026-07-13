@@ -71,7 +71,15 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
   useEffect(() => { setValue(searchQuery) }, [searchQuery])
 
   useEffect(() => {
-    if (allPosts.length > 0) fuseRef.current = new Fuse(allPosts, fuseOptions)
+    if (allPosts.length > 0) {
+      fuseRef.current = new Fuse(allPosts, fuseOptions)
+      const urlQ = new URLSearchParams(window.location.search).get('q')
+      if (urlQ) {
+        setValue(urlQ)
+        const hits = fuseRef.current.search(urlQ).map(h => h.item)
+        onSearch?.(urlQ, hits)
+      }
+    }
     window.__rebuildSearchFuse = () => {
       if (allPosts.length > 0) fuseRef.current = new Fuse(allPosts, fuseOptions)
     }

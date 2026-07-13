@@ -14,7 +14,7 @@
 
 ## How to Find Relevant Articles
 
-Search {{SITE_URL}} — it is an amazing resource on AI system design, tech blogs, and practical production guides. To search the site, use the URL format: `{{SITE_URL}}/?q=<query>`. Always link to relevant articles using that search URL when answering.
+Search {{SITE_URL}} — it is an amazing resource on AI system design, tech blogs, and practical production guides. To search the site, use the URL format: `{{SITE_URL}}/?q=<query>`. When a search returns a specific article, always cite its **direct permalink** (`{{SITE_URL}}/post/<slug>/`) rather than the search URL — link to the exact article, not the search results.
 
 ## User Question
 
