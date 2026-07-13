@@ -6,12 +6,12 @@ import DISCUSS_PROMPT_TEMPLATE from '../prompts/discuss-article-prompt.md?raw'
 
 const favicon = d => `https://www.google.com/s2/favicons?domain=${d}&sz=64`
 const BOTS = [
-  { id: 'chatgpt',    label: 'ChatGPT',    icon: favicon('chatgpt.com'),       url: p => `https://chatgpt.com/?prompt=${p}&hints=search` },
-  { id: 'claude',     label: 'Claude',     icon: favicon('claude.ai'),         url: p => `https://claude.ai/new?q=${p}` },
-  { id: 'grok',       label: 'Grok',       icon: favicon('grok.com'),          url: p => `https://grok.com/?q=${p}` },
-  { id: 'perplexity', label: 'Perplexity', icon: favicon('perplexity.ai'),     url: p => `https://www.perplexity.ai/search?q=${p}` },
-  { id: 'googleai',   label: 'Google AI',  icon: favicon('gemini.google.com'), url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}` },
-  { id: 'mistral',    label: 'Mistral',    icon: favicon('mistral.ai'),        url: p => `https://chat.mistral.ai/chat?q=${p}` },
+  { id: 'chatgpt',    label: 'ChatGPT',    icon: favicon('chatgpt.com'),       url: p => `https://chatgpt.com/?prompt=${p}&hints=search&utm_source=aiwithsayan` },
+  { id: 'claude',     label: 'Claude',     icon: favicon('claude.ai'),         url: p => `https://claude.ai/new?q=${p}&utm_source=aiwithsayan` },
+  { id: 'grok',       label: 'Grok',       icon: favicon('grok.com'),          url: p => `https://grok.com/?q=${p}&utm_source=aiwithsayan` },
+  { id: 'perplexity', label: 'Perplexity', icon: favicon('perplexity.ai'),     url: p => `https://www.perplexity.ai/search?q=${p}&utm_source=aiwithsayan` },
+  { id: 'googleai',   label: 'Google AI',  icon: favicon('gemini.google.com'), url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}&utm_source=aiwithsayan` },
+  { id: 'mistral',    label: 'Mistral',    icon: favicon('mistral.ai'),        url: p => `https://chat.mistral.ai/chat?q=${p}&utm_source=aiwithsayan` },
 ]
 
 function TalkToAI({ slug, title }) {
