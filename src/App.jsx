@@ -20,8 +20,8 @@ export default function App() {
         const sorted = posts.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''))
         setAllPosts(sorted)
 
-        const params = new URLSearchParams(window.location.search)
-        const permalinkSlug = params.get('post')
+        const pathMatch = window.location.pathname.match(/^\/post\/([^/]+)\/?$/)
+        const permalinkSlug = pathMatch?.[1]
         if (permalinkSlug) {
           const pIdx = sorted.findIndex(p => p.slug === permalinkSlug)
           if (pIdx !== -1) setCurrentPost({ ...sorted[pIdx], globalIdx: pIdx + 1 })
@@ -35,8 +35,8 @@ export default function App() {
   const openPost = useCallback((post, globalIdx) => {
     setCurrentPost({ ...post, globalIdx })
     const url = new URL(window.location)
-    url.searchParams.set('post', post.slug)
-    url.searchParams.delete('q')
+    url.pathname = '/post/' + post.slug + '/'
+    url.search = ''
     window.history.pushState({}, '', url)
     window.scrollTo({ top: 0 })
   }, [])
@@ -44,15 +44,16 @@ export default function App() {
   const closePost = useCallback(() => {
     setCurrentPost(null)
     const url = new URL(window.location)
-    url.searchParams.delete('post')
+    url.pathname = '/'
+    url.search = ''
     window.history.pushState({}, '', url)
     window.scrollTo({ top: 0 })
   }, [])
 
   useEffect(() => {
     function onPopState() {
-      const params = new URLSearchParams(window.location.search)
-      const slug = params.get('post')
+      const pathMatch = window.location.pathname.match(/^\/post\/([^/]+)\/?$/)
+      const slug = pathMatch?.[1]
       if (slug) {
         setAllPosts(prev => {
           const pIdx = prev.findIndex(p => p.slug === slug)
@@ -62,6 +63,7 @@ export default function App() {
       } else {
         setCurrentPost(null)
       }
+      const params = new URLSearchParams(window.location.search)
       if (!params.get('q')) setFeedSearch({ query: '', posts: [] })
     }
     window.addEventListener('popstate', onPopState)

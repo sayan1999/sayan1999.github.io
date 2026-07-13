@@ -27,7 +27,7 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | File/Folder                               | Purpose                                                                                                |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                              | Vite entry point — GA tags, meta, fonts                                                                |
-| `src/App.jsx`                             | Root component — manifest fetch, pagination state, permalink handling                                  |
+| `src/App.jsx`                             | Root component — manifest fetch, pagination state, path-based post routing (`/post/<slug>/`)           |
 | `src/components/`                         | Hero, Sidebar, SearchBar, CommandPalette (Ask AI + bot routing), ChatWithAI, Article, ArticlePage, PdfStrip, ShareMenu, Pagination, Footer |
 | `src/prompts/ask-ai-prompt.md`            | System prompt template for the Ask AI feature — uses `{{SITE_URL}}` and `{{USER_QUERY}}` placeholders  |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |
@@ -52,9 +52,10 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 
   **Critical invariant:** when transitioning to bot picker, always call `inputRef.current?.blur()` so the input truly loses DOM focus. This ensures clicking the input again fires `onFocus` → `setShowBotPopover(false)`, returning to typing state. Without the blur, `onFocus` never fires (input was already focused) and the bot picker gets stuck.
 - npm packages: `pdfjs-dist`, `marked`, `fuse.js`, `stopword` (used by the Vite manifest plugin to strip stop-words from the body search index). The pdf.js worker is loaded from CDN (`cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js`) to avoid bundling issues.
-- **Vite plugin** (`vite.config.js`) generates `content-lab/manifest.json`, `sitemap.xml`, and performs `__SITE_URL__` string substitution in `robots.txt` and `llms.txt`. `VITE_SITE_URL` env var must be set for production builds (the `predeploy` script handles this automatically).
+- **Vite plugin** (`vite.config.js`) generates `content-lab/manifest.json`, `sitemap.xml`, and performs `__SITE_URL__` string substitution in `robots.txt` and `llms.txt`. It also generates **static HTML pages** at `dist/post/<slug>/index.html` for every post — each page contains the full article content (rendered from `article.md`) plus the React bundle, so crawlers/LLMs get static HTML while real users get the full interactive SPA. Sitemap article URLs point to `/post/<slug>/`. `VITE_SITE_URL` env var must be set for production builds (the `predeploy` script handles this automatically).
 - **Never hardcode the site URL** (`https://sayan1999.github.io` or any variant) anywhere in source files. Always use the `__SITE_URL__` placeholder in static files (replaced at build time) or `import.meta.env.VITE_SITE_URL` in JS/JSX. Hardcoding breaks local dev, staging, and any future domain changes.
 - Do not duplicate content between `manifest.json` (title/description/date) and `article.md` (caption/tags) — each field has exactly one source of truth.
+- **Post URLs use path routing**, not query params. In the SPA, opening a post pushes `/post/<slug>/` to history (never `?post=`). Share links in `ShareMenu.jsx` and `ArticlePage.jsx` use `window.location.origin + '/post/' + slug + '/'`. The static file at `dist/post/<slug>/index.html` is what GitHub Pages actually serves when someone navigates directly to that URL.
 
 ## Mobile vs Desktop Behavior
 

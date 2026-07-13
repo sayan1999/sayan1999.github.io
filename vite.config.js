@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { readdirSync, readFileSync, writeFileSync, existsSync } from 'fs'
+import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { removeStopwords, eng } from 'stopword'
+import { marked } from 'marked'
 
 function parseFrontmatter(src) {
   const match = src.match(/^---\r?\n([\s\S]*?)\r?\n---/)
@@ -64,7 +65,7 @@ function buildSitemap(siteUrl, posts) {
     { loc: siteUrl + '/', priority: '1.0', changefreq: 'weekly' },
   ]
   const articleUrls = posts.map(p => ({
-    loc: `${siteUrl}/?post=${p.slug}`,
+    loc: `${siteUrl}/post/${p.slug}/`,
     lastmod: p.date,
     priority: '0.8',
     changefreq: 'monthly',
@@ -74,6 +75,133 @@ function buildSitemap(siteUrl, posts) {
     `  <url>\n    <loc>${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ''}\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`
   ).join('\n')
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>\n`
+}
+
+function esc(str) {
+  return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+function escJson(str) {
+  return String(str ?? '').replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+}
+
+function buildArticleHtml(siteUrl, post, mdSrc, jsBundle, cssBundle) {
+  const stripped = mdSrc.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
+  const withoutHashtags = stripped.split('\n')
+    .filter(line => !/^(#\w+\s*)+$/.test(line.trim()))
+    .join('\n')
+  const bodyHtml = marked.parse(withoutHashtags)
+  const pageUrl = `${siteUrl}/post/${post.slug}/`
+  const dateStr = post.date
+    ? new Date(post.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : ''
+  const tagsHtml = (post.tags || []).map(t => `<span class="art-tag">${esc(t)}</span>`).join('')
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${esc(post.title)} | AI System Designs for Production</title>
+  <meta name="description" content="${esc(post.description)}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="AI System Designs for Production">
+  <meta property="og:title" content="${esc(post.title)}">
+  <meta property="og:description" content="${esc(post.description)}">
+  <meta property="og:url" content="${pageUrl}">
+  <meta property="og:image" content="${siteUrl}/assets/logo/og-preview.png">
+  ${post.date ? `<meta property="article:published_time" content="${post.date}">` : ''}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@aiwithsayan">
+  <meta name="twitter:title" content="${esc(post.title)}">
+  <meta name="twitter:description" content="${esc(post.description)}">
+  <meta name="twitter:image" content="${siteUrl}/assets/logo/og-preview.png">
+  <link rel="canonical" href="${pageUrl}">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/logo/favicon-16x16.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "${escJson(post.title)}",
+    "description": "${escJson(post.description)}",
+    "url": "${pageUrl}",
+    "datePublished": "${post.date || ''}",
+    "author": { "@type": "Person", "name": "Sayan Dey", "url": "${siteUrl}/", "sameAs": ["https://github.com/sayan1999","https://www.linkedin.com/in/aiwithsayan","https://twitter.com/aiwithsayan"] },
+    "publisher": { "@type": "Person", "name": "Sayan Dey", "url": "${siteUrl}/" },
+    "keywords": ${JSON.stringify(post.tags || [])}
+  }
+  </script>
+  ${cssBundle ? `<link rel="stylesheet" href="/assets/${cssBundle}">` : ''}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07090b;--bg2:#0c0f12;--surface:#131820;--border:#1e272f;--text:#e4eaf0;--text2:#9db0bc;--text3:#445260;--cyan:#00c9b1;--gold:#d4a843;--accent:#8b5cf6}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+    .shell{max-width:760px;margin:0 auto;padding:0 1.5rem;border-left:1px solid var(--border);border-right:1px solid var(--border);min-height:100vh}
+    .back-link{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text3);text-decoration:none;padding:1.75rem 0 0;letter-spacing:.04em}
+    .back-link:hover{color:var(--cyan)}
+    .art-meta{margin:2.5rem 0 .4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text3);letter-spacing:.08em}
+    h1.art-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,5vw,2.4rem);line-height:1.2;color:var(--text);margin:.6rem 0 .5rem}
+    .art-desc{color:var(--text2);font-size:.95rem;line-height:1.65;margin-bottom:1.25rem}
+    .art-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:2rem}
+    .art-tag{font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--gold);background:rgba(212,168,67,.07);border:1px solid rgba(212,168,67,.18);border-radius:3px;padding:.18rem .45rem}
+    .art-body{padding-bottom:4rem}
+    .art-body h1,.art-body h2,.art-body h3{font-family:'Playfair Display',serif;color:var(--text);margin:2rem 0 .7rem;line-height:1.3}
+    .art-body h1{font-size:1.55rem}.art-body h2{font-size:1.25rem}.art-body h3{font-size:1.05rem}
+    .art-body p{color:var(--text2);line-height:1.8;margin-bottom:1rem;font-size:.96rem}
+    .art-body strong{color:var(--text)}
+    .art-body em{color:var(--text2)}
+    .art-body code{font-family:'JetBrains Mono',monospace;font-size:.84em;background:var(--surface);color:var(--cyan);padding:.1em .35em;border-radius:3px}
+    .art-body pre{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.25rem;overflow-x:auto;margin:1.25rem 0}
+    .art-body pre code{background:none;color:var(--text);padding:0;font-size:.84rem}
+    .art-body blockquote{border-left:2px solid var(--cyan);margin:1.25rem 0;padding:.75rem 1rem;background:rgba(0,201,177,.04);color:var(--text2);font-style:italic}
+    .art-body ul,.art-body ol{padding-left:1.5rem;margin-bottom:1rem;color:var(--text2);line-height:1.8}
+    .art-body li{margin-bottom:.25rem;font-size:.96rem}
+    .art-body a{color:var(--cyan);text-decoration:none}.art-body a:hover{text-decoration:underline}
+    .art-body hr{border:none;border-top:1px solid var(--border);margin:2rem 0}
+    .footer{border-top:1px solid var(--border);padding:2rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .footer-handle{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+    .footer-home{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text3);text-decoration:none}.footer-home:hover{color:var(--cyan)}
+  </style>
+</head>
+<body>
+  <div id="root"><div class="shell">
+    <a class="back-link" href="${siteUrl}/">← all articles</a>
+    ${dateStr ? `<div class="art-meta">${dateStr}</div>` : ''}
+    <h1 class="art-title">${esc(post.title)}</h1>
+    ${post.description ? `<p class="art-desc">${esc(post.description)}</p>` : ''}
+    ${tagsHtml ? `<div class="art-tags">${tagsHtml}</div>` : ''}
+    <div class="art-body">${bodyHtml}</div>
+    <footer class="footer">
+      <span class="footer-handle">@aiwithsayan</span>
+      <a class="footer-home" href="${siteUrl}/">AI System Designs for Production</a>
+    </footer>
+  </div></div>
+  ${jsBundle ? `<script type="module" src="/assets/${jsBundle}"></script>` : ''}
+</body>
+</html>`
+}
+
+function generateStaticPages(outDir, siteUrl, contentDir, posts) {
+  const assetsDir = join(outDir, 'assets')
+  const assetFiles = existsSync(assetsDir) ? readdirSync(assetsDir) : []
+  const jsBundle = assetFiles.find(f => f.startsWith('index-') && f.endsWith('.js'))
+  const cssBundle = assetFiles.find(f => f.startsWith('index-') && f.endsWith('.css'))
+
+  for (const post of posts) {
+    const mdPath = join(contentDir, post.slug, 'article.md')
+    if (!existsSync(mdPath)) continue
+    const mdSrc = readFileSync(mdPath, 'utf8')
+    const html = buildArticleHtml(siteUrl, post, mdSrc, jsBundle, cssBundle)
+    const dir = join(outDir, 'post', post.slug)
+    mkdirSync(dir, { recursive: true })
+    writeFileSync(join(dir, 'index.html'), html)
+  }
 }
 
 function manifestPlugin(siteUrl) {
@@ -113,6 +241,7 @@ function manifestPlugin(siteUrl) {
         if (existsSync(p))
           writeFileSync(p, readFileSync(p, 'utf8').replaceAll('__SITE_URL__', siteUrl))
       }
+      generateStaticPages(outDir, siteUrl, contentDir, buildManifest(contentDir))
     },
   }
 }
