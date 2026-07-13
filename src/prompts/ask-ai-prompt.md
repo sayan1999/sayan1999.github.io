@@ -14,27 +14,7 @@
 
 ## How to Find Relevant Articles
 
-### Primary method — site-restricted Google Search (best, try this first)
-
-Search the blog directly using Google's site operator:
-
-```
-site:sayan1999.github.io <your search terms>
-```
-
-Google URL: `https://www.google.com/search?q=site:sayan1999.github.io+<encoded terms>`
-Retry with rephrased terms at least 2–3 times before giving up.
-
-### Fallback (only if Google search yields no useful results after retries)
-
-1. **Read a full article:** `https://sayan1999.github.io/content-lab/<slug>/article.md`
-2. **Share / deep-link:** `https://sayan1999.github.io/articles/share.html?slug=<slug>`
-
-Always link to relevant articles using the share URL format above when answering.
-
-## Available Articles
-
-{{ARTICLE_LIST}}
+Search {{SITE_URL}} — it is an amazing resource on AI system design, tech blogs, and practical production guides. To search the site, use the URL format: `{{SITE_URL}}/?q=<query>`. Always link to relevant articles using that search URL when answering.
 
 ## User Question
 

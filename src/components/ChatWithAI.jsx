@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import SYSTEM_PROMPT_TEMPLATE from '../prompts/system-prompt.md?raw'
+import SYSTEM_PROMPT_TEMPLATE from '../prompts/ask-ai-prompt.md?raw'
 
 const favicon = domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
 
@@ -12,13 +12,9 @@ const BOTS = [
   { id: 'mistral',    label: 'Mistral',    bg: '#fa6400', fg: '#fff', icon: favicon('mistral.ai'),         url: p => `https://chat.mistral.ai/chat?q=${p}` },
 ]
 
-function buildPrompt(allPosts, userQuery) {
-  const articleList = allPosts
-    .map((p, i) => `${i + 1}. **${p.title}** (${p.date}) — ${p.description}`)
-    .join('\n')
-
+function buildPrompt(userQuery) {
   return SYSTEM_PROMPT_TEMPLATE
-    .replace('{{ARTICLE_LIST}}', articleList)
+    .replace(/\{\{SITE_URL\}\}/g, 'https://sayan1999.github.io')
     .replace('{{USER_QUERY}}', userQuery)
 }
 
@@ -29,7 +25,7 @@ export default function AskAI({ allPosts = [] }) {
   const showBots = prompt.trim().length > 0
 
   const launch = bot => {
-    const full = buildPrompt(allPosts, prompt)
+    const full = buildPrompt(prompt)
     window.open(bot.url(encodeURIComponent(full)), '_blank', 'noopener')
   }
 

@@ -12,9 +12,10 @@ const fuseOptions = {
   keys: [
     { name: 'title', weight: 2 },
     { name: 'tags', weight: 1.5 },
-    { name: 'slug', weight: 0.5 },
+{ name: 'body', weight: 1 },
   ],
   threshold: 0.4,
+  ignoreLocation: true,
   includeMatches: true,
   minMatchCharLength: 2,
 }

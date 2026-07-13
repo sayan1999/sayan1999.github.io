@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Fuse from 'fuse.js'
-import SYSTEM_PROMPT_TEMPLATE from '../prompts/system-prompt.md?raw'
+import SYSTEM_PROMPT_TEMPLATE from '../prompts/ask-ai-prompt.md?raw'
 
-const PAGE_SIZE = 10
 const favicon = domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
 
 const BOTS = [
@@ -18,9 +17,10 @@ const fuseOptions = {
   keys: [
     { name: 'title', weight: 2 },
     { name: 'tags', weight: 1.5 },
-    { name: 'slug', weight: 0.5 },
+    { name: 'body', weight: 1 },
   ],
   threshold: 0.4,
+  ignoreLocation: true,
   includeMatches: true,
   minMatchCharLength: 2,
 }
@@ -30,12 +30,9 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-function buildPrompt(allPosts, userQuery) {
-  const articleList = allPosts
-    .map((p, i) => `${i + 1}. **${p.title}** (${p.date}) — ${p.description}`)
-    .join('\n')
+function buildPrompt(userQuery) {
   return SYSTEM_PROMPT_TEMPLATE
-    .replace('{{ARTICLE_LIST}}', articleList)
+    .replace(/\{\{SITE_URL\}\}/g, window.location.origin)
     .replace('{{USER_QUERY}}', userQuery)
 }
 
@@ -54,25 +51,23 @@ const SUGGESTIONS = {
   ],
 }
 
-export default function CommandPalette({ allPosts = [], onNavigate, externalQuery, externalTrigger }) {
+export default function CommandPalette({ allPosts = [], onNavigate, onSearch, externalQuery, externalTrigger }) {
   const [mode, setMode] = useState('ai')
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
   const [placeholderIdx, setPlaceholderIdx] = useState(0)
   const [placeholderVisible, setPlaceholderVisible] = useState(true)
-  const [searchResults, setSearchResults] = useState([])
-  const [activeIdx, setActiveIdx] = useState(-1)
   const [showBotPopover, setShowBotPopover] = useState(false)
 
   const inputRef = useRef(null)
   const frameRef = useRef(null)
   const fuseRef = useRef(null)
   const blurTimerRef = useRef(null)
-  const sendWrapRef = useRef(null)
+const sendWrapRef = useRef(null)
   const botFloatRef = useRef(null)
   const [botPos, setBotPos] = useState(null)
 
-  const dropdownOpen = focused || (mode === 'search' && !!query) || searchResults.length > 0
+  const dropdownOpen = mode === 'ai' && focused
 
   useEffect(() => {
     if (showBotPopover && sendWrapRef.current) {
@@ -100,7 +95,6 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
     if (externalQuery) {
       setMode('search')
       setQuery(externalQuery)
-      doSearch(externalQuery)
       setFocused(true)
       setTimeout(() => inputRef.current?.focus(), 40)
     }
@@ -144,8 +138,6 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
         clearTimeout(blurTimerRef.current)
         setFocused(false)
         setShowBotPopover(false)
-        setSearchResults([])
-        setActiveIdx(-1)
       }
     }
     document.addEventListener('mousedown', handler)
@@ -169,26 +161,23 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
     return () => document.removeEventListener('keydown', handler)
   }, [showBotPopover])
 
-  function doSearch(q) {
-    if (!q || !fuseRef.current) { setSearchResults([]); setActiveIdx(-1); return }
-    setSearchResults(fuseRef.current.search(q, { limit: 8 }))
-    setActiveIdx(-1)
+  function commitSearch(q) {
+    if (!q || !fuseRef.current) { onSearch?.('', []); return }
+    const all = fuseRef.current.search(q).map(h => h.item)
+    onSearch?.(q, all)
   }
 
   function handleInput(e) {
     const el = e.target
     el.style.height = 'auto'
     el.style.height = el.scrollHeight + 'px'
-    const q = el.value
-    setQuery(q)
+    setQuery(el.value)
     setShowBotPopover(false)
-    if (mode === 'search') doSearch(q)
   }
 
   function handleFocus() {
     clearTimeout(blurTimerRef.current)
     setFocused(true)
-    if (mode === 'search' && query) doSearch(query)
   }
 
   function handleBlur() {
@@ -196,26 +185,10 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
   }
 
   function handleKeyDown(e) {
-    if (mode === 'search' && searchResults.length > 0) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        setActiveIdx(i => Math.min(i + 1, searchResults.length - 1))
-        return
-      }
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        setActiveIdx(i => Math.max(i - 1, -1))
-        return
-      }
-      if (e.key === 'Enter') {
-        const target = activeIdx >= 0 ? searchResults[activeIdx] : searchResults[0]
-        if (target) { navigateTo(target); return }
-      }
-    }
     if (e.key === 'Enter') {
       e.preventDefault()
       if (mode === 'search') {
-        if (searchResults[0]) navigateTo(searchResults[0])
+        if (query.trim()) { commitSearch(query); setFocused(false); inputRef.current?.blur() }
       } else if (query.trim()) {
         setShowBotPopover(true)
       }
@@ -226,44 +199,29 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
     }
   }
 
-  function navigateTo(hit) {
-    const refIndex = allPosts.findIndex(p => p.slug === hit.item.slug)
-    if (refIndex === -1) return
-    const page = Math.floor(refIndex / PAGE_SIZE) + 1
-    const localIdx = (refIndex % PAGE_SIZE) + 1
-    clearTimeout(blurTimerRef.current)
-    setFocused(false)
-    setQuery('')
-    setSearchResults([])
-    setActiveIdx(-1)
-    onNavigate(page, localIdx)
-  }
-
-  function handleSend() {
+function handleSend() {
     if (query.trim()) setShowBotPopover(true)
   }
 
   function launchBot(bot) {
-    const full = buildPrompt(allPosts, query)
+    const full = buildPrompt(query)
     window.open(bot.url(encodeURIComponent(full)), '_blank', 'noopener')
     setShowBotPopover(false)
     setFocused(false)
     setQuery('')
   }
 
-  function handleSuggestionClick(s, currentMode) {
+  function handleSuggestionClick(s) {
     setQuery(s)
     setFocused(true)
     clearTimeout(blurTimerRef.current)
-    if (currentMode === 'search') doSearch(s)
     inputRef.current?.focus()
   }
 
   function switchMode(m) {
+    if (m !== 'search') onSearch?.('', [])
     setMode(m)
     setQuery('')
-    setSearchResults([])
-    setActiveIdx(-1)
     setShowBotPopover(false)
     clearTimeout(blurTimerRef.current)
     setFocused(true)
@@ -272,42 +230,20 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
 
   const placeholder = SUGGESTIONS[mode][placeholderIdx]
 
-  let dropdownContent
-  if (mode === 'search' && query) {
-    dropdownContent = searchResults.length > 0 ? (
-      <div className="cp-results">
-        {searchResults.map((hit, i) => (
-          <div
-            key={hit.item.slug}
-            className={`cp-result-item${i === activeIdx ? ' active' : ''}`}
-            onMouseDown={e => e.preventDefault()}
-            onClick={() => navigateTo(hit)}
-            onMouseEnter={() => setActiveIdx(i)}
-          >
-            <div className="cp-result-title">{hit.item.title}</div>
-            {hit.item.date && <div className="cp-result-meta">{formatDate(hit.item.date)}</div>}
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div className="cp-empty">no results</div>
-    )
-  } else {
-    dropdownContent = (
-      <div className="cp-suggestions">
-        {SUGGESTIONS[mode].map((s, i) => (
-          <button
-            key={i}
-            className="cp-suggestion"
-            onMouseDown={e => e.preventDefault()}
-            onClick={() => handleSuggestionClick(s, mode)}
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-    )
-  }
+  const dropdownContent = (
+    <div className="cp-suggestions">
+      {SUGGESTIONS.ai.map((s, i) => (
+        <button
+          key={i}
+          className="cp-suggestion"
+          onMouseDown={e => e.preventDefault()}
+          onClick={() => handleSuggestionClick(s, mode)}
+        >
+          {s}
+        </button>
+      ))}
+    </div>
+  )
 
   return (
     <div className="cp-section">
@@ -356,7 +292,7 @@ export default function CommandPalette({ allPosts = [], onNavigate, externalQuer
             {query && (
               <button
                 className="cp-clear-btn"
-                onMouseDown={e => { e.preventDefault(); setQuery(''); setSearchResults([]); setActiveIdx(-1); setShowBotPopover(false); if (inputRef.current) { inputRef.current.style.height = 'auto'; inputRef.current.focus() } }}
+                onMouseDown={e => { e.preventDefault(); setQuery(''); setShowBotPopover(false); onSearch?.('', []); if (inputRef.current) { inputRef.current.style.height = 'auto'; inputRef.current.focus() } }}
               >×</button>
             )}
           </div>

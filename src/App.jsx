@@ -1,98 +1,152 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Hero from './components/Hero'
-import CommandPalette from './components/CommandPalette'
+import Footer from './components/Footer'
 import Article from './components/Article'
+import ArticlePage from './components/ArticlePage'
 import Pagination from './components/Pagination'
-import Sidebar from './components/Sidebar'
 
 const PAGE_SIZE = 10
 
 export default function App() {
   const [allPosts, setAllPosts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [scrollTarget, setScrollTarget] = useState(null)
-  const [filterQuery, setFilterQuery] = useState('')
-  const [filterTrigger, setFilterTrigger] = useState(0)
-  const snavRef = useRef(null)
+  const [currentPost, setCurrentPost] = useState(null)
+  const [feedSearch, setFeedSearch] = useState({ query: '', posts: [] })
 
   useEffect(() => {
     fetch('/content-lab/manifest.json')
       .then(r => r.json())
       .then(posts => {
-        const sorted = posts.slice().sort((a, b) =>
-          (b.date || '').localeCompare(a.date || '')
-        )
+        const sorted = posts.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''))
         setAllPosts(sorted)
 
-        const permalinkSlug = new URLSearchParams(window.location.search).get('post')
+        const params = new URLSearchParams(window.location.search)
+        const permalinkSlug = params.get('post')
         if (permalinkSlug) {
           const pIdx = sorted.findIndex(p => p.slug === permalinkSlug)
-          if (pIdx !== -1) {
-            const page = Math.floor(pIdx / PAGE_SIZE) + 1
-            const localIdx = (pIdx % PAGE_SIZE) + 1
-            setCurrentPage(page)
-            setScrollTarget(`post-${localIdx}`)
-            return
-          }
+          if (pIdx !== -1) setCurrentPost({ ...sorted[pIdx], globalIdx: pIdx + 1 })
         }
-        setCurrentPage(1)
+        // Restore search from URL — Hero will run Fuse once allPosts is set
+        // We store the raw query; Hero rebuilds results via its own Fuse
       })
       .catch(e => console.error('manifest error', e))
   }, [])
 
-  const handleNavigate = useCallback((page, localIdx) => {
-    setCurrentPage(page)
-    setScrollTarget(`post-${localIdx}`)
-    setFilterQuery('')
+  const openPost = useCallback((post, globalIdx) => {
+    setCurrentPost({ ...post, globalIdx })
+    const url = new URL(window.location)
+    url.searchParams.set('post', post.slug)
+    url.searchParams.delete('q')
+    window.history.pushState({}, '', url)
+    window.scrollTo({ top: 0 })
+  }, [])
+
+  const closePost = useCallback(() => {
+    setCurrentPost(null)
+    const url = new URL(window.location)
+    url.searchParams.delete('post')
+    window.history.pushState({}, '', url)
+    window.scrollTo({ top: 0 })
+  }, [])
+
+  useEffect(() => {
+    function onPopState() {
+      const params = new URLSearchParams(window.location.search)
+      const slug = params.get('post')
+      if (slug) {
+        setAllPosts(prev => {
+          const pIdx = prev.findIndex(p => p.slug === slug)
+          if (pIdx !== -1) setCurrentPost({ ...prev[pIdx], globalIdx: pIdx + 1 })
+          return prev
+        })
+      } else {
+        setCurrentPost(null)
+      }
+      if (!params.get('q')) setFeedSearch({ query: '', posts: [] })
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  const handleSearch = useCallback((q, posts) => {
+    setFeedSearch({ query: q, posts: posts || [] })
+    setCurrentPost(null)
+    const url = new URL(window.location)
+    if (q) {
+      url.searchParams.set('q', q)
+      url.searchParams.delete('post')
+    } else {
+      url.searchParams.delete('q')
+    }
+    window.history.pushState({}, '', url)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const handlePageChange = useCallback((page) => {
     setCurrentPage(page)
-    setScrollTarget(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
-
-  const handleFilterByTag = useCallback((tag) => {
-    setFilterQuery(tag)
-    setFilterTrigger(t => t + 1)
   }, [])
 
   const totalPages = Math.ceil(allPosts.length / PAGE_SIZE)
   const start = (currentPage - 1) * PAGE_SIZE
-  const pagePosts = allPosts.slice(start, start + PAGE_SIZE)
+  const isSearchActive = Boolean(feedSearch.query)
+  const feedPosts = isSearchActive ? feedSearch.posts : allPosts.slice(start, start + PAGE_SIZE)
+
+  const hero = (
+    <Hero
+      allPosts={allPosts}
+      searchQuery={feedSearch.query}
+      onSearch={handleSearch}
+    />
+  )
+
+  if (currentPost) {
+    return (
+      <div className="shell shell--article">
+        <div className="content">
+          {hero}
+          <ArticlePage
+            post={currentPost}
+            globalIdx={currentPost.globalIdx}
+            onBack={closePost}
+            onFilterTag={(tag) => window.__heroSearch?.(tag)}
+          />
+          <Footer />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="shell">
-      <Sidebar
-        posts={pagePosts}
-        startIdx={start}
-        snavRef={snavRef}
-      />
       <div className="content">
-        <Hero />
-        <CommandPalette
-          allPosts={allPosts}
-          onNavigate={handleNavigate}
-          externalQuery={filterQuery}
-          externalTrigger={filterTrigger}
-        />
+        {hero}
+        {isSearchActive && (
+          <div className="feed-search-header">
+            <span>{feedSearch.posts.length} result{feedSearch.posts.length !== 1 ? 's' : ''} for <em>"{feedSearch.query}"</em></span>
+            <button className="feed-search-clear" onClick={() => handleSearch('', [])}>clear</button>
+          </div>
+        )}
         <div id="feed">
-          {pagePosts.map((post, i) => (
-            <Article
-              key={post.slug}
-              post={post}
-              idx={i + 1}
-              globalIdx={start + i + 1}
-              onFilterTag={handleFilterByTag}
-              scrollTarget={scrollTarget}
-            />
-          ))}
+          {feedPosts.map((post, i) => {
+            const gIdx = isSearchActive
+              ? allPosts.findIndex(p => p.slug === post.slug) + 1
+              : start + i + 1
+            return (
+              <Article
+                key={post.slug}
+                post={post}
+                globalIdx={gIdx}
+                onOpen={(p) => openPost(p, gIdx)}
+                onFilterTag={(tag) => window.__heroSearch?.(tag)}
+              />
+            )
+          })}
         </div>
-        <Pagination
-          page={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        {!isSearchActive && (
+          <Pagination page={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        )}
+        <Footer />
       </div>
     </div>
   )

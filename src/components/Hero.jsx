@@ -1,4 +1,41 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import Fuse from 'fuse.js'
+import SYSTEM_PROMPT_TEMPLATE from '../prompts/ask-ai-prompt.md?raw'
+
+const favicon = domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+
+const BOTS = [
+  { id: 'chatgpt',    label: 'ChatGPT',    icon: favicon('chatgpt.com'),       url: p => `https://chatgpt.com/?prompt=${p}&hints=search` },
+  { id: 'grok',       label: 'Grok',       icon: favicon('grok.com'),          url: p => `https://grok.com/?q=${p}` },
+  { id: 'perplexity', label: 'Perplexity', icon: favicon('perplexity.ai'),     url: p => `https://www.perplexity.ai/search?q=${p}` },
+  { id: 'claude',     label: 'Claude',     icon: favicon('claude.ai'),         url: p => `https://claude.ai/new?q=${p}` },
+  { id: 'googleai',   label: 'Google AI',  icon: favicon('gemini.google.com'), url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}` },
+  { id: 'mistral',    label: 'Mistral',    icon: favicon('mistral.ai'),        url: p => `https://chat.mistral.ai/chat?q=${p}` },
+]
+
+const AI_SUGGESTIONS = [
+  'How do I eval my AI agent when no exceptions fire but users are churning?',
+  'My model scored 95% in CV but only 60% in prod — what went wrong?',
+  'My RAG is missing relevant docs — when should I switch from bi-encoders to ColBERT?',
+  'How do I build an AI writing tool that remembers my style corrections across sessions?',
+]
+
+const fuseOptions = {
+  keys: [
+    { name: 'title', weight: 2 },
+    { name: 'tags', weight: 1.5 },
+    { name: 'body', weight: 1 },
+  ],
+  threshold: 0.4,
+  ignoreLocation: true,
+  minMatchCharLength: 2,
+}
+
+function buildPrompt(userQuery) {
+  return SYSTEM_PROMPT_TEMPLATE
+    .replace(/\{\{SITE_URL\}\}/g, 'https://sayan1999.github.io')
+    .replace('{{USER_QUERY}}', userQuery)
+}
 
 const IconInstagram = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
@@ -18,21 +55,184 @@ const IconGitHub = () => (
   </svg>
 )
 
-export default function Hero() {
+export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
+  const [value, setValue] = useState(searchQuery)
+  const [focused, setFocused] = useState(false)
+  const [showBotPopover, setShowBotPopover] = useState(false)
+  const [botPos, setBotPos] = useState(null)
+
+  const inputRef = useRef(null)
+  const wrapRef = useRef(null)
+  const botFloatRef = useRef(null)
+  const searchRef = useRef(null)
+  const fuseRef = useRef(null)
+  const blurTimerRef = useRef(null)
+
+  useEffect(() => { setValue(searchQuery) }, [searchQuery])
+
+  useEffect(() => {
+    if (allPosts.length > 0) fuseRef.current = new Fuse(allPosts, fuseOptions)
+    window.__rebuildSearchFuse = () => {
+      if (allPosts.length > 0) fuseRef.current = new Fuse(allPosts, fuseOptions)
+    }
+    window.__heroSearch = (q) => {
+      if (!q || !fuseRef.current) { onSearch?.('', []); return }
+      setValue(q)
+      const hits = fuseRef.current.search(q).map(h => h.item)
+      onSearch?.(q, hits)
+    }
+    return () => { delete window.__rebuildSearchFuse; delete window.__heroSearch }
+  }, [allPosts, onSearch])
+
+  useEffect(() => {
+    if (showBotPopover && searchRef.current) {
+      const rect = searchRef.current.getBoundingClientRect()
+      setBotPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right })
+    } else {
+      setBotPos(null)
+    }
+  }, [showBotPopover])
+
+
+  // Close popover on outside click
+  useEffect(() => {
+    const handler = e => {
+      if (!wrapRef.current?.contains(e.target) && !botFloatRef.current?.contains(e.target)) {
+        clearTimeout(blurTimerRef.current)
+        setFocused(false)
+        setShowBotPopover(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  // '/' shortcut
+  useEffect(() => {
+    const handler = e => {
+      const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)
+      if (e.key === '/' && !inInput) { e.preventDefault(); inputRef.current?.focus() }
+      if (e.key === 'Escape') { setFocused(false); setShowBotPopover(false); inputRef.current?.blur() }
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [])
+
+  function commitSearch(q) {
+    if (!q || !fuseRef.current) { onSearch?.('', []); return }
+    const hits = fuseRef.current.search(q).map(h => h.item)
+    onSearch?.(q, hits)
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (value.trim()) { commitSearch(value); setFocused(false); inputRef.current?.blur() }
+    }
+    if (e.key === 'Escape') {
+      if (showBotPopover) { setShowBotPopover(false); return }
+      setValue(''); onSearch?.('', []); setFocused(false); inputRef.current?.blur()
+    }
+  }
+
+  function handleClear() {
+    setValue(''); onSearch?.('', []); setShowBotPopover(false)
+    inputRef.current?.focus()
+  }
+
+  function launchBot(bot) {
+    const full = buildPrompt(value)
+    window.open(bot.url(encodeURIComponent(full)), '_blank', 'noopener')
+    setShowBotPopover(false); setFocused(false)
+  }
+
+  const dropdownOpen = focused && !showBotPopover
+
   return (
-    <header className="site-hero">
-      <div className="hero-meta">
-        <a href="https://instagram.com/shy_on_day" target="_blank" rel="noopener" aria-label="Instagram">
-          <IconInstagram />
-        </a>
-        <a href="https://linkedin.com/in/sdey" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <IconLinkedIn />
-        </a>
-        <a href="https://github.com/sayan1999" target="_blank" rel="noopener" aria-label="GitHub">
-          <IconGitHub />
-        </a>
-      </div>
-      <p className="hero-subtitle"><span className="hero-sitename">AI with Sayan</span> · Engineering playbooks for modern AI stacks</p>
-    </header>
+    <>
+      {showBotPopover && botPos && (
+        <div className="cp-bot-float" ref={botFloatRef} style={{ top: botPos.top, right: botPos.right }}>
+          {BOTS.map(bot => (
+            <button key={bot.id} className="cp-bot-card" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
+              <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
+              <span className="cp-bot-name">{bot.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <header className="site-header" ref={wrapRef}>
+        <a className="site-logo" href="/">AI with Sayan</a>
+
+        <div className="header-search" ref={searchRef}>
+          <div className="header-search-inner">
+            <input
+              ref={inputRef}
+              className="header-search-input"
+              type="text"
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              onFocus={() => { clearTimeout(blurTimerRef.current); setFocused(true); setShowBotPopover(false) }}
+              onBlur={() => { blurTimerRef.current = setTimeout(() => setFocused(false), 160) }}
+              onKeyDown={handleKeyDown}
+              autoComplete="off"
+              spellCheck="false"
+            />
+            {!value && !focused && (
+              <div className="header-search-placeholder visible">
+                search articles — or ask AI anything
+              </div>
+            )}
+          </div>
+
+          {value && (
+            <button className="header-search-clear" onMouseDown={e => e.preventDefault()} onClick={handleClear}>×</button>
+          )}
+
+          {dropdownOpen && (
+            <div className="header-search-dropdown">
+              {value.trim() ? (
+                <button
+                  className="header-ask-ai-action"
+                  onMouseDown={e => e.preventDefault()}
+                  onClick={() => { setFocused(false); setShowBotPopover(v => !v); inputRef.current?.blur() }}
+                >
+                  <span className="header-ask-ai-label">✨ Ask AI</span>
+                  <span className="header-ask-ai-query">"{value}"</span>
+                </button>
+              ) : (
+                <>
+                  <div className="header-dropdown-label">✨ Ask AI</div>
+                  <div className="header-suggestions-wrap">
+                    {AI_SUGGESTIONS.map((s, i) => (
+                      <button
+                        key={i}
+                        className="header-suggestion"
+                        onMouseDown={e => e.preventDefault()}
+                        onClick={() => {
+                          setValue(s)
+                          clearTimeout(blurTimerRef.current)
+                          setFocused(false)
+                          setShowBotPopover(true)
+                          inputRef.current?.blur()
+                        }}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        <nav className="site-header-nav">
+          <a href="https://instagram.com/shy_on_day" target="_blank" rel="noopener" aria-label="Instagram" className="site-nav-icon"><IconInstagram /></a>
+          <a href="https://linkedin.com/in/sdey" target="_blank" rel="noopener" aria-label="LinkedIn" className="site-nav-icon"><IconLinkedIn /></a>
+          <a href="https://github.com/sayan1999" target="_blank" rel="noopener" aria-label="GitHub" className="site-nav-icon"><IconGitHub /></a>
+        </nav>
+      </header>
+    </>
   )
 }

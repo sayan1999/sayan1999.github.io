@@ -28,13 +28,14 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                              | Vite entry point — GA tags, meta, fonts                                                                |
 | `src/App.jsx`                             | Root component — manifest fetch, pagination state, permalink handling                                  |
-| `src/components/`                         | Hero, Sidebar, SearchBar, CommandPalette (Ask AI + bot routing), ChatWithAI, Article, PdfStrip, ShareMenu, Pagination |
-| `src/prompts/system-prompt.md`            | Template for the Ask AI prompt — 3 sections: static context, `{{ARTICLE_LIST}}`, `{{USER_QUERY}}`     |
+| `src/components/`                         | Hero, Sidebar, SearchBar, CommandPalette (Ask AI + bot routing), ChatWithAI, Article, ArticlePage, PdfStrip, ShareMenu, Pagination, Footer |
+| `src/prompts/ask-ai-prompt.md`            | System prompt template for the Ask AI feature — uses `{{SITE_URL}}` and `{{USER_QUERY}}` placeholders  |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |
 | `public/content-lab/manifest.json`        | **Auto-generated** by the Vite plugin in `vite.config.js` — not in git, never edit manually            |
 | `public/content-lab/<slug>/article.md`    | YAML frontmatter (`title`, `date`, `description`) + post caption; hashtag lines auto-extracted as tags |
 | `public/content-lab/<slug>/artifact.pdf`  | Carousel slides (1080×1350 px, 4:5) rendered via pdf.js                                                |
-| `public/articles/share.html` + `share.js` | OG/Twitter meta injection; redirects to `/?post=<slug>`                                                |
+| `public/articles/share.html` + `share.js` | OG/Twitter meta injection; redirects to `/?post=<slug>`; `__SITE_URL__` substituted at build          |
+| `public/robots.txt` + `llms.txt`          | SEO/crawler directives; `__SITE_URL__` substituted at build time by the Vite plugin                    |
 | `public/assets/logo/`                     | Favicons, webmanifest                                                                                  |
 
 **Editorial-only files** (not served by the app):
@@ -46,8 +47,15 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 - **Social sharing** routes through `articles/share.html?slug=X` to inject OG meta before redirecting to `/?post=X`.
 - **PDF rendering** upscales by `devicePixelRatio` for retina sharpness. Worker loaded from CDN: `pdf.js` v3.11.174.
 - **PDF slide modal**: clicking any slide card opens a fullscreen modal (backdrop blur, scale-in animation). Supports keyboard arrows (←→), touch swipe left/right, and backdrop-click to close. Drag-to-scroll on the strip is distinguished from a tap via a `moved` flag — only clean taps open the modal.
-- **Search** (`SearchBar.jsx`) is a standalone sidebar component — auto-growing textarea (max 5 rows), Fuse.js fuzzy search, `/` shortcut to focus. `CommandPalette` is the separate Ask AI + bot-routing panel.
-- npm packages: `pdfjs-dist`, `marked`, `fuse.js`. The pdf.js worker is loaded from CDN (`cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js`) to avoid bundling issues.
+- **Hero search bar** (`Hero.jsx`) handles both search and Ask AI. It has three mutually exclusive states driven by `focused` and `showBotPopover`:
+  - **idle**: `focused=false, showBotPopover=false` — placeholder visible
+  - **typing**: `focused=true, showBotPopover=false` — dropdown open (suggestions or "Ask AI" action)
+  - **bot picker**: `showBotPopover=true` — provider list shown, dropdown hidden (`dropdownOpen = focused && !showBotPopover`)
+
+  **Critical invariant:** when transitioning to bot picker, always call `inputRef.current?.blur()` so the input truly loses DOM focus. This ensures clicking the input again fires `onFocus` → `setShowBotPopover(false)`, returning to typing state. Without the blur, `onFocus` never fires (input was already focused) and the bot picker gets stuck.
+- npm packages: `pdfjs-dist`, `marked`, `fuse.js`, `stopword` (used by the Vite manifest plugin to strip stop-words from the body search index). The pdf.js worker is loaded from CDN (`cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js`) to avoid bundling issues.
+- **Vite plugin** (`vite.config.js`) generates three build artifacts: `content-lab/manifest.json`, `sitemap.xml`, and performs `__SITE_URL__` string substitution in `articles/share.html`, `robots.txt`, and `llms.txt`. `VITE_SITE_URL` env var must be set for production builds (the `predeploy` script handles this automatically).
+- **Never hardcode the site URL** (`https://sayan1999.github.io` or any variant) anywhere in source files. Always use the `__SITE_URL__` placeholder in static files (replaced at build time) or `import.meta.env.VITE_SITE_URL` in JS/JSX. Hardcoding breaks local dev, staging, and any future domain changes.
 - Do not duplicate content between `manifest.json` (title/description/date) and `article.md` (caption/tags) — each field has exactly one source of truth.
 
 ## Mobile vs Desktop Behavior
@@ -96,7 +104,7 @@ npm run dev       # Vite dev server at http://localhost:5173
 ### Deploying to GitHub Pages
 
 ```bash
-npm run deploy    # runs: npm run build && gh-pages -d dist
+npm run deploy    # runs predeploy (vite build with VITE_SITE_URL set) then gh-pages -d dist --dotfiles --nojekyll
 ```
 
 This builds the app into `dist/` and force-pushes it to the `gh-pages` branch. GitHub Pages serves from that branch. The `main` branch holds source only — never push `dist/` to `main`.

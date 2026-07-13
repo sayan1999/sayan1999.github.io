@@ -21,7 +21,7 @@
         const desc =
           post.description || "Engineering playbooks for modern AI stacks.";
         const url =
-          "https://sayan1999.github.io/articles/share.html?slug=" +
+          window.location.origin + "/articles/share.html?slug=" +
           encodeURIComponent(slug);
 
         document.title = fullTitle;

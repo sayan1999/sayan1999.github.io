@@ -3,20 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://sayan1999.github.io",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --dotfiles"
+    "predeploy": "VITE_SITE_URL=https://sayan1999.github.io vite build",
+    "deploy": "gh-pages -d dist --dotfiles --nojekyll"
   },
   "dependencies": {
     "fuse.js": "^7.0.0",
     "marked": "^9.0.0",
     "pdfjs-dist": "^3.11.174",
     "react": "^18.3.0",
-    "react-dom": "^18.3.0"
+    "react-dom": "^18.3.0",
+    "stopword": "^3.1.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.0",
