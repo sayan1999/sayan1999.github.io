@@ -198,7 +198,7 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
                   onClick={() => { setFocused(false); setShowBotPopover(v => !v); inputRef.current?.blur() }}
                 >
                   <span className="header-ask-ai-label">✨ Ask AI</span>
-                  <span className="header-ask-ai-query">"{value}"</span>
+                  <span className="header-ask-ai-query">{value}</span>
                 </button>
               ) : (
                 <>

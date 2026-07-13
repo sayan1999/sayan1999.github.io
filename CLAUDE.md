@@ -28,12 +28,12 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                              | Vite entry point — GA tags, meta, fonts                                                                |
 | `src/App.jsx`                             | Root component — manifest fetch, pagination state, path-based post routing (`/post/<slug>/`)           |
-| `src/components/`                         | Hero, Sidebar, SearchBar, CommandPalette (Ask AI + bot routing), ChatWithAI, Article, ArticlePage, PdfStrip, ShareMenu, Pagination, Footer |
+| `src/components/`                         | Hero (search + Ask AI + bot routing), Article, ArticlePage (PDF + share), ShareMenu, Pagination, Footer — `SearchBar.jsx`, `CommandPalette.jsx`, `ChatWithAI.jsx` exist but are unused |
 | `src/prompts/ask-ai-prompt.md`            | System prompt template for the Ask AI feature — uses `{{SITE_URL}}` and `{{USER_QUERY}}` placeholders  |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |
 | `public/content-lab/manifest.json`        | **Auto-generated** by the Vite plugin in `vite.config.js` — not in git, never edit manually            |
 | `public/content-lab/<slug>/article.md`    | YAML frontmatter (`title`, `date`, `description`) + post caption; hashtag lines auto-extracted as tags |
-| `public/content-lab/<slug>/artifact.pdf`  | Carousel slides (1080×1350 px, 4:5) rendered via pdf.js                                                |
+| `public/content-lab/<slug>/artifact.pdf`  | Slides rendered inline in `ArticlePage.jsx` via pdf.js — one slide per article section, extras appended at the end |
 | `public/robots.txt` + `llms.txt`          | SEO/crawler directives; `__SITE_URL__` substituted at build time by the Vite plugin                    |
 | `public/assets/logo/`                     | Favicons, webmanifest                                                                                  |
 
@@ -43,15 +43,14 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 ## Key Conventions
 
 - **Tags** are auto-extracted from lines matching `/^(#\w+\s*)+$/` in `article.md` — hashtags must be on their own paragraph.
-- **PDF rendering** upscales by `devicePixelRatio` for retina sharpness. Worker loaded from CDN: `pdf.js` v3.11.174.
-- **PDF slide modal**: clicking any slide card opens a fullscreen modal (backdrop blur, scale-in animation). Supports keyboard arrows (←→), touch swipe left/right, and backdrop-click to close. Drag-to-scroll on the strip is distinguished from a tap via a `moved` flag — only clean taps open the modal.
 - **Hero search bar** (`Hero.jsx`) handles both search and Ask AI. It has three mutually exclusive states driven by `focused` and `showBotPopover`:
   - **idle**: `focused=false, showBotPopover=false` — placeholder visible
   - **typing**: `focused=true, showBotPopover=false` — dropdown open (suggestions or "Ask AI" action)
   - **bot picker**: `showBotPopover=true` — provider list shown, dropdown hidden (`dropdownOpen = focused && !showBotPopover`)
 
   **Critical invariant:** when transitioning to bot picker, always call `inputRef.current?.blur()` so the input truly loses DOM focus. This ensures clicking the input again fires `onFocus` → `setShowBotPopover(false)`, returning to typing state. Without the blur, `onFocus` never fires (input was already focused) and the bot picker gets stuck.
-- npm packages: `pdfjs-dist`, `marked`, `fuse.js`, `stopword` (used by the Vite manifest plugin to strip stop-words from the body search index). The pdf.js worker is loaded from CDN (`cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js`) to avoid bundling issues.
+- **Inline PDF rendering** (`ArticlePage.jsx`): `artifact.pdf` is loaded via `pdfjs-dist` and rendered canvas-by-canvas inline between article sections. Each section gets one matching slide; extra slides are appended after the last section. Worker loaded from CDN: `cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js`.
+- npm packages: `pdfjs-dist`, `marked`, `fuse.js`, `stopword` (used by the Vite manifest plugin to strip stop-words from the body search index).
 - **Vite plugin** (`vite.config.js`) generates `content-lab/manifest.json`, `sitemap.xml`, and performs `__SITE_URL__` string substitution in `robots.txt` and `llms.txt`. It also generates **static HTML pages** at `dist/post/<slug>/index.html` for every post — each page contains the full article content (rendered from `article.md`) plus the React bundle, so crawlers/LLMs get static HTML while real users get the full interactive SPA. Sitemap article URLs point to `/post/<slug>/`. `VITE_SITE_URL` env var must be set for production builds (the `predeploy` script handles this automatically).
 - **Never hardcode the site URL** (`https://sayan1999.github.io` or any variant) anywhere in source files. Always use the `__SITE_URL__` placeholder in static files (replaced at build time) or `import.meta.env.VITE_SITE_URL` in JS/JSX. Hardcoding breaks local dev, staging, and any future domain changes.
 - Do not duplicate content between `manifest.json` (title/description/date) and `article.md` (caption/tags) — each field has exactly one source of truth.
@@ -63,13 +62,8 @@ The breakpoint is **640px** (`@media (max-width: 640px)`). Key differences to be
 
 | Concern | Desktop | Mobile |
 |---|---|---|
-| Sidenav | Visible sticky sidebar | Hidden (`display: none`) |
-| PDF card width | `clamp(280px, 30vw, 400px)` via CSS + JS | `clamp(220px, 68vw, 300px)` via CSS + JS mirror |
-| CommandPalette | Toggle row beside input row | Toggle row stacks **above** input row |
-| PDF modal nav | Arrow keys + prev/next buttons | Touch swipe left/right + buttons |
-| Search input | Auto-grow textarea, max 5 rows | Same |
-
-**Critical:** `PdfStrip.jsx` computes `CARD_W` in JS (used for canvas render resolution) and must mirror the CSS clamp exactly — if you change the mobile CSS card width, update the JS `isMobile` branch on the same line too, or canvases will render at the wrong size and get clipped.
+| Header layout | Logo + search + icons in one row | Logo + icons on top row; search bar full-width on second row |
+| Search input | Inline underline input in header | Same, but full-width on its own row |
 
 ## Maintaining & Deploying
 
@@ -96,7 +90,7 @@ npm run dev       # Vite dev server at http://localhost:5173
    #Tag1 #Tag2 #Tag3
    ```
 
-2. Add `public/content-lab/<slug>/artifact.pdf` (1080×1350 px slides)
+2. Add `public/content-lab/<slug>/artifact.pdf` (slides, 1080×1350 px, 4:5 ratio)
 
 `manifest.json` is auto-generated — `npm run dev` or `npm run deploy` picks it up automatically. No other changes needed.
 
