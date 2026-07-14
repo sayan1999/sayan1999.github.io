@@ -39,6 +39,7 @@ export default function App() {
     url.search = ''
     window.history.pushState({}, '', url)
     window.scrollTo({ top: 0 })
+    window.gtag?.('event', 'article_open', { slug: post.slug, title: post.title })
   }, [])
 
   const closePost = useCallback(() => {

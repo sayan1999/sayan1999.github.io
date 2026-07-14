@@ -116,6 +116,7 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
     if (!q || !fuseRef.current) { onSearch?.('', []); return }
     const hits = fuseRef.current.search(q).map(h => h.item)
     onSearch?.(q, hits)
+    window.gtag?.('event', 'search', { search_term: q, result_count: hits.length })
   }
 
   function handleKeyDown(e) {
@@ -138,6 +139,7 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
     const full = buildPrompt(value)
     window.open(bot.url(encodeURIComponent(full)), '_blank', 'noopener')
     setShowBotPopover(false); setFocused(false)
+    window.gtag?.('event', 'ask_ai_launch', { bot: bot.label, query: value.trim().slice(0, 100) })
   }
 
   const dropdownOpen = focused && !showBotPopover

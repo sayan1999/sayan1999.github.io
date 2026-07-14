@@ -30,6 +30,7 @@ function TalkToAI({ slug, title }) {
 
   function launch(bot) {
     window.open(bot.url(encodeURIComponent(prompt)), '_blank', 'noopener')
+    window.gtag?.('event', 'discuss_bot_launch', { bot: bot.label, slug })
     setOpen(false)
   }
 
@@ -121,7 +122,7 @@ function PdfSlide({ pdfDoc, pageNum }) {
       <div
         className={`pdf-slide-inline${loaded ? ' pdf-slide-clickable' : ''}`}
         ref={wrapRef}
-        onClick={() => loaded && setLightbox(true)}
+        onClick={() => { if (!loaded) return; setLightbox(true); window.gtag?.('event', 'pdf_lightbox_open', { page: pageNum }) }}
       >
         {!loaded && (
           <div className="pdf-slide-spinner">
@@ -210,6 +211,7 @@ export default function ArticlePage({ post, globalIdx, onBack, onFilterTag }) {
   function handleTagClick(tag) {
     onBack()
     onFilterTag?.(tag)
+    window.gtag?.('event', 'tag_filter', { tag })
   }
 
   return (

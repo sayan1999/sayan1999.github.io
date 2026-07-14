@@ -112,3 +112,11 @@ npm install <pkg> # add a new package
 ```
 
 After any `package.json` change, commit both `package.json` and `package-lock.json`.
+
+### Finding dead code
+
+```bash
+npx knip          # finds unused files, exports, and dependencies
+```
+
+`knip.json` at the repo root ignores `.claude/**` (agent worktrees). Knip does not analyse CSS — check `src/index.css` manually against JSX class names when removing components.

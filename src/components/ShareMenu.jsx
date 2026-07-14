@@ -34,9 +34,13 @@ export default function ShareMenu({ slug, title }) {
     setOpen(false)
   }
 
+  function track(method) {
+    window.gtag?.('event', 'share', { method, content_id: slug })
+  }
+
   function shareWA() {
     window.open('https://wa.me/?text=' + encodeURIComponent(title + ' ' + shareUrl), '_blank', 'noopener')
-    close()
+    track('whatsapp'); close()
   }
 
   function shareX() {
@@ -44,7 +48,7 @@ export default function ShareMenu({ slug, title }) {
       'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(shareUrl),
       '_blank', 'noopener'
     )
-    close()
+    track('twitter'); close()
   }
 
   function shareReddit() {
@@ -52,7 +56,7 @@ export default function ShareMenu({ slug, title }) {
       'https://reddit.com/submit?url=' + encodeURIComponent(shareUrl) + '&title=' + encodeURIComponent(title),
       '_blank', 'noopener'
     )
-    close()
+    track('reddit'); close()
   }
 
   function shareIG() {
@@ -64,7 +68,7 @@ export default function ShareMenu({ slug, title }) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     })
-    close()
+    track('copy_link'); close()
   }
 
   // Close on outside click
