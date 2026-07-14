@@ -66,9 +66,22 @@ const HASHTAG_RE = /^(#\w+\s*)+$/
 function PdfSlide({ pdfDoc, pageNum }) {
   const canvasRef = useRef(null)
   const wrapRef = useRef(null)
+  const [loaded, setLoaded] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    if (!pdfDoc || !canvasRef.current) return
+    const el = wrapRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { rootMargin: '200px' }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!visible || !pdfDoc || !canvasRef.current) return
     let cancelled = false
     async function render() {
       try {
@@ -84,18 +97,23 @@ function PdfSlide({ pdfDoc, pageNum }) {
         canvas.style.width = `${Math.round(vp.width / DPR)}px`
         canvas.style.height = `${Math.round(vp.height / DPR)}px`
         await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise
+        if (!cancelled) setLoaded(true)
       } catch (e) {
         if (e?.name !== 'RenderingCancelledException') console.error(e)
       }
     }
     render()
     return () => { cancelled = true }
-  }, [pdfDoc, pageNum])
+  }, [visible, pdfDoc, pageNum])
 
   return (
     <div className="pdf-slide-inline" ref={wrapRef}>
-      <canvas ref={canvasRef} />
-      <div className="pdf-slide-label">{String(pageNum).padStart(2, '0')}</div>
+      {!loaded && (
+        <div className="pdf-slide-spinner">
+          <div className="pdf-spinner-ring" />
+        </div>
+      )}
+      <canvas ref={canvasRef} style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }} />
     </div>
   )
 }

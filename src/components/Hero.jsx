@@ -173,6 +173,7 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
         <a className="site-logo" href="/">AI with Sayan</a>
 
         <div className="header-search" ref={searchRef}>
+          <div className="header-search-pill">
           <div className="header-search-inner">
             <input
               ref={inputRef}
@@ -191,11 +192,11 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
                 search articles — or ask AI anything
               </div>
             )}
+            {value && (
+              <button className="header-search-clear" onMouseDown={e => e.preventDefault()} onClick={handleClear}>×</button>
+            )}
           </div>
-
-          {value && (
-            <button className="header-search-clear" onMouseDown={e => e.preventDefault()} onClick={handleClear}>×</button>
-          )}
+          </div>
 
           {dropdownOpen && (
             <div className="header-search-dropdown">
