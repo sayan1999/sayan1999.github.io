@@ -28,7 +28,7 @@ The app automatically handles rendering, search, pagination, tagging, and sharin
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                              | Vite entry point — GA tags, meta, fonts                                                                |
 | `src/App.jsx`                             | Root component — manifest fetch, pagination state, path-based post routing (`/post/<slug>/`)           |
-| `src/components/`                         | Hero (search + Ask AI + bot routing), Article, ArticlePage (PDF + share), ShareMenu, Pagination, Footer — `SearchBar.jsx`, `CommandPalette.jsx`, `ChatWithAI.jsx` exist but are unused |
+| `src/components/`                         | Hero (search + Ask AI + bot routing), Article, ArticlePage (PDF + share), ShareMenu, Pagination, Footer |
 | `src/prompts/ask-ai-prompt.md`            | System prompt template for the Ask AI feature — uses `{{SITE_URL}}` and `{{USER_QUERY}}` placeholders  |
 | `src/prompts/discuss-article-prompt.md`   | Prompt sent when a user clicks "discuss this article" — uses `{{TITLE}}` and `{{ARTICLE_URL}}` placeholders |
 | `src/index.css`                           | All styles — CSS custom properties (--bg, --cyan, --gold, etc.)                                        |

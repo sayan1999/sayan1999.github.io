@@ -4,14 +4,13 @@ import * as pdfjsLib from 'pdfjs-dist'
 import ShareMenu from './ShareMenu'
 import DISCUSS_PROMPT_TEMPLATE from '../prompts/discuss-article-prompt.md?raw'
 
-const favicon = d => `https://www.google.com/s2/favicons?domain=${d}&sz=64`
 const BOTS = [
-  { id: 'chatgpt',    label: 'ChatGPT',    icon: favicon('chatgpt.com'),       url: p => `https://chatgpt.com/?prompt=${p}&hints=search&utm_source=aiwithsayan` },
-  { id: 'claude',     label: 'Claude',     icon: favicon('claude.ai'),         url: p => `https://claude.ai/new?q=${p}&utm_source=aiwithsayan` },
-  { id: 'grok',       label: 'Grok',       icon: favicon('grok.com'),          url: p => `https://grok.com/?q=${p}&utm_source=aiwithsayan` },
-  { id: 'perplexity', label: 'Perplexity', icon: favicon('perplexity.ai'),     url: p => `https://www.perplexity.ai/search?q=${p}&utm_source=aiwithsayan` },
-  { id: 'googleai',   label: 'Google AI',  icon: favicon('gemini.google.com'), url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}&utm_source=aiwithsayan` },
-  { id: 'mistral',    label: 'Mistral',    icon: favicon('mistral.ai'),        url: p => `https://chat.mistral.ai/chat?q=${p}&utm_source=aiwithsayan` },
+  { id: 'chatgpt',    label: 'ChatGPT',    url: p => `https://chatgpt.com/?prompt=${p}&hints=search&utm_source=aiwithsayan` },
+  { id: 'claude',     label: 'Claude',     url: p => `https://claude.ai/new?q=${p}&utm_source=aiwithsayan` },
+  { id: 'grok',       label: 'Grok',       url: p => `https://grok.com/?q=${p}&utm_source=aiwithsayan` },
+  { id: 'perplexity', label: 'Perplexity', url: p => `https://www.perplexity.ai/search?q=${p}&utm_source=aiwithsayan` },
+  { id: 'googleai',   label: 'Google AI',  url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}&utm_source=aiwithsayan` },
+  { id: 'mistral',    label: 'Mistral',    url: p => `https://chat.mistral.ai/chat?q=${p}&utm_source=aiwithsayan` },
 ]
 
 function TalkToAI({ slug, title }) {
@@ -44,7 +43,6 @@ function TalkToAI({ slug, title }) {
           <div className="talk-ai-label">discuss with</div>
           {BOTS.map(bot => (
             <button key={bot.id} className="cp-bot-card" onClick={() => launch(bot)}>
-              <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
               <span className="cp-bot-name">{bot.label}</span>
             </button>
           ))}
@@ -68,6 +66,7 @@ function PdfSlide({ pdfDoc, pageNum }) {
   const wrapRef = useRef(null)
   const [loaded, setLoaded] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [lightbox, setLightbox] = useState(false)
 
   useEffect(() => {
     const el = wrapRef.current
@@ -106,15 +105,47 @@ function PdfSlide({ pdfDoc, pageNum }) {
     return () => { cancelled = true }
   }, [visible, pdfDoc, pageNum])
 
+  useEffect(() => {
+    if (!lightbox) return
+    function onKey(e) { if (e.key === 'Escape') setLightbox(false) }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [lightbox])
+
   return (
-    <div className="pdf-slide-inline" ref={wrapRef}>
-      {!loaded && (
-        <div className="pdf-slide-spinner">
-          <div className="pdf-spinner-ring" />
+    <>
+      <div
+        className={`pdf-slide-inline${loaded ? ' pdf-slide-clickable' : ''}`}
+        ref={wrapRef}
+        onClick={() => loaded && setLightbox(true)}
+      >
+        {!loaded && (
+          <div className="pdf-slide-spinner">
+            <div className="pdf-spinner-ring" />
+          </div>
+        )}
+        <canvas ref={canvasRef} style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }} />
+      </div>
+      {lightbox && (
+        <div className="pdf-lightbox" onClick={() => setLightbox(false)}>
+          <button className="pdf-lightbox-close" onClick={() => setLightbox(false)}>✕</button>
+          <div className="pdf-lightbox-inner" onClick={e => e.stopPropagation()}>
+            <canvas
+              ref={node => {
+                if (!node || !canvasRef.current) return
+                node.width = canvasRef.current.width
+                node.height = canvasRef.current.height
+                node.getContext('2d').drawImage(canvasRef.current, 0, 0)
+              }}
+            />
+          </div>
         </div>
       )}
-      <canvas ref={canvasRef} style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }} />
-    </div>
+    </>
   )
 }
 
@@ -186,18 +217,20 @@ export default function ArticlePage({ post, globalIdx, onBack, onFilterTag }) {
       <button className="art-back-btn" onClick={onBack}>← All articles</button>
 
       <div className="art-header">
-        <div className="art-actions">
-          <TalkToAI slug={slug} title={title} />
-          <ShareMenu slug={slug} title={title} />
-        </div>
-        <div className="art-meta-row">
-          <div className="art-num">{String(globalIdx).padStart(2, '0')}</div>
-          {dateStr && (
-            <>
-              <span className="art-meta-sep">·</span>
-              <div className="art-date">{dateStr}</div>
-            </>
-          )}
+        <div className="art-header-top">
+          <div className="art-meta-row">
+            <div className="art-num">{String(globalIdx).padStart(2, '0')}</div>
+            {dateStr && (
+              <>
+                <span className="art-meta-sep">·</span>
+                <div className="art-date">{dateStr}</div>
+              </>
+            )}
+          </div>
+          <div className="art-actions">
+            <TalkToAI slug={slug} title={title} />
+            <ShareMenu slug={slug} title={title} />
+          </div>
         </div>
         <div className="art-tags">
           {tags.map((tag, i) => (
@@ -208,6 +241,7 @@ export default function ArticlePage({ post, globalIdx, onBack, onFilterTag }) {
           ))}
         </div>
         <h1 className="art-title">{title}</h1>
+
         {description && <p className="art-desc">{description}</p>}
       </div>
 

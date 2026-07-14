@@ -2,15 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Fuse from 'fuse.js'
 import SYSTEM_PROMPT_TEMPLATE from '../prompts/ask-ai-prompt.md?raw'
 
-const favicon = domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
-
 const BOTS = [
-  { id: 'chatgpt',    label: 'ChatGPT',    icon: favicon('chatgpt.com'),       url: p => `https://chatgpt.com/?prompt=${p}&hints=search&utm_source=aiwithsayan` },
-  { id: 'grok',       label: 'Grok',       icon: favicon('grok.com'),          url: p => `https://grok.com/?q=${p}&utm_source=aiwithsayan` },
-  { id: 'perplexity', label: 'Perplexity', icon: favicon('perplexity.ai'),     url: p => `https://www.perplexity.ai/search?q=${p}&utm_source=aiwithsayan` },
-  { id: 'claude',     label: 'Claude',     icon: favicon('claude.ai'),         url: p => `https://claude.ai/new?q=${p}&utm_source=aiwithsayan` },
-  { id: 'googleai',   label: 'Google AI',  icon: favicon('gemini.google.com'), url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}&utm_source=aiwithsayan` },
-  { id: 'mistral',    label: 'Mistral',    icon: favicon('mistral.ai'),        url: p => `https://chat.mistral.ai/chat?q=${p}&utm_source=aiwithsayan` },
+  { id: 'chatgpt',    label: 'ChatGPT',    url: p => `https://chatgpt.com/?prompt=${p}&hints=search&utm_source=aiwithsayan` },
+  { id: 'grok',       label: 'Grok',       url: p => `https://grok.com/?q=${p}&utm_source=aiwithsayan` },
+  { id: 'perplexity', label: 'Perplexity', url: p => `https://www.perplexity.ai/search?q=${p}&utm_source=aiwithsayan` },
+  { id: 'claude',     label: 'Claude',     url: p => `https://claude.ai/new?q=${p}&utm_source=aiwithsayan` },
+  { id: 'googleai',   label: 'Google AI',  url: p => `https://www.google.com/search?udm=50&aep=11&q=${p}&utm_source=aiwithsayan` },
+  { id: 'mistral',    label: 'Mistral',    url: p => `https://chat.mistral.ai/chat?q=${p}&utm_source=aiwithsayan` },
 ]
 
 const AI_SUGGESTIONS = [
@@ -59,11 +57,9 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
   const [value, setValue] = useState(searchQuery)
   const [focused, setFocused] = useState(false)
   const [showBotPopover, setShowBotPopover] = useState(false)
-  const [botPos, setBotPos] = useState(null)
 
   const inputRef = useRef(null)
   const wrapRef = useRef(null)
-  const botFloatRef = useRef(null)
   const searchRef = useRef(null)
   const fuseRef = useRef(null)
   const blurTimerRef = useRef(null)
@@ -92,20 +88,10 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
     return () => { delete window.__rebuildSearchFuse; delete window.__heroSearch }
   }, [allPosts, onSearch])
 
-  useEffect(() => {
-    if (showBotPopover && searchRef.current) {
-      const rect = searchRef.current.getBoundingClientRect()
-      setBotPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right })
-    } else {
-      setBotPos(null)
-    }
-  }, [showBotPopover])
-
-
   // Close popover on outside click
   useEffect(() => {
     const handler = e => {
-      if (!wrapRef.current?.contains(e.target) && !botFloatRef.current?.contains(e.target)) {
+      if (!wrapRef.current?.contains(e.target)) {
         clearTimeout(blurTimerRef.current)
         setFocused(false)
         setShowBotPopover(false)
@@ -158,17 +144,6 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
 
   return (
     <>
-      {showBotPopover && botPos && (
-        <div className="cp-bot-float" ref={botFloatRef} style={{ top: botPos.top, right: botPos.right }}>
-          {BOTS.map(bot => (
-            <button key={bot.id} className="cp-bot-card" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
-              <img className="cp-bot-avatar" src={bot.icon} alt={bot.label} />
-              <span className="cp-bot-name">{bot.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
       <header className="site-header" ref={wrapRef}>
         <a className="site-logo" href="/">AI with Sayan</a>
 
@@ -200,38 +175,48 @@ export default function Hero({ allPosts = [], searchQuery = '', onSearch }) {
 
           {dropdownOpen && (
             <div className="header-search-dropdown">
-              {value.trim() ? (
-                <button
-                  className="header-ask-ai-action"
-                  onMouseDown={e => e.preventDefault()}
-                  onClick={() => { setFocused(false); setShowBotPopover(v => !v); inputRef.current?.blur() }}
-                >
-                  <span className="header-ask-ai-label">✨ Ask AI</span>
-                  <span className="header-ask-ai-query">{value}</span>
-                </button>
-              ) : (
-                <>
-                  <div className="header-dropdown-label">✨ Ask AI</div>
-                  <div className="header-suggestions-wrap">
-                    {AI_SUGGESTIONS.map((s, i) => (
-                      <button
-                        key={i}
-                        className="header-suggestion"
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={() => {
-                          setValue(s)
-                          clearTimeout(blurTimerRef.current)
-                          setFocused(false)
-                          setShowBotPopover(true)
-                          inputRef.current?.blur()
-                        }}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
+              <div className="header-dropdown-label">✨ Ask AI</div>
+              <div className="header-suggestions-wrap">
+                {value.trim() ? (
+                  <button
+                    className="header-suggestion"
+                    onMouseDown={e => e.preventDefault()}
+                    onClick={() => { setFocused(false); setShowBotPopover(v => !v); inputRef.current?.blur() }}
+                  >
+                    {value}
+                  </button>
+                ) : (
+                  AI_SUGGESTIONS.map((s, i) => (
+                    <button
+                      key={i}
+                      className="header-suggestion"
+                      onMouseDown={e => e.preventDefault()}
+                      onClick={() => {
+                        setValue(s)
+                        clearTimeout(blurTimerRef.current)
+                        setFocused(false)
+                        setShowBotPopover(true)
+                        inputRef.current?.blur()
+                      }}
+                    >
+                      {s}
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {showBotPopover && (
+            <div className="header-bot-picker">
+              <div className="header-dropdown-label">Ask AI via —</div>
+              <div className="header-bot-list">
+                {BOTS.map(bot => (
+                  <button key={bot.id} className="header-bot-row" onMouseDown={e => e.preventDefault()} onClick={() => launchBot(bot)}>
+                    {bot.label}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
